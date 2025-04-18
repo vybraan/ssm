@@ -1,8 +1,8 @@
 # SSM | Secure Shell Manager
 
-SSM is a TUI application which helps you manage your SSH config, filter through hosts and easily connect via SSH or MOSH.
+Secure Shell Manager (SSM) helps you manage your SSH config, filter through hosts and easily connect via SSH or MOSH.
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue)](license)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue)](license.md)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 
 ## Features
