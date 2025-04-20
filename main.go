@@ -16,6 +16,10 @@ var BuildVersion = "v0.0.1-dev"
 var BuildDate = "unset"
 var BuildSHA = "unset"
 
+var (
+	filterArg string
+)
+
 func main() {
 	appcmd := &cli.Command{
 		Authors: []any{
@@ -37,7 +41,9 @@ func main() {
 				"Build sha":     BuildSHA,
 			}
 		},
-		Usage: "Secure Shell Manager",
+		Usage:       "Secure Shell Manager",
+		ArgsUsage:   "[filter]",
+		Description: "SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, command execution and file transfer.",
 
 		Before: func(c context.Context, cmd *cli.Command) (context.Context, error) {
 			_ = cmd
@@ -45,6 +51,13 @@ func main() {
 		},
 
 		Action: mainCmd,
+		Arguments: []cli.Argument{
+			&cli.StringArg{
+				Name:        "filter",
+				Destination: &filterArg,
+				Max:         1,
+			},
+		},
 
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -61,7 +74,7 @@ func main() {
 		},
 
 		Commands: []*cli.Command{
-			subCmd,
+			testCmd,
 		},
 	}
 
@@ -100,36 +113,31 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 	}
 
 	m := tui.NewModel(config, debug)
-	_, err = tea.NewProgram(
+	p := tea.NewProgram(
 		m,
-		tea.WithOutput(os.Stderr)).
-		Run()
-	if err != nil {
-		return fmt.Errorf("failed to run %v interface: %w", cmd.Name, err)
+		tea.WithOutput(os.Stderr))
+	go func() {
+		_, err = p.Run()
+		if err != nil {
+			e := fmt.Errorf("failed to run %v: %w", cmd.Name, err)
+			fmt.Println(e)
+		}
+		os.Exit(0)
+	}()
+	if filterArg != "" {
+		p.Send(tui.FilterMsg{
+			Arg: fmt.Sprintf("#%s", filterArg),
+		})
 	}
-
+	p.Wait()
 	return nil
 }
 
-var subCmd = &cli.Command{
+var testCmd = &cli.Command{
 	Name:   "test",
-	Usage:  "test command",
-	Action: subAction,
+	Action: testAction,
 	Hidden: true,
 }
-
-var subAction = func(_ context.Context, _ *cli.Command) error {
-	fmt.Println("PID: ", os.Getpid())
-	fmt.Println("testing")
-	c, err := sshconf.Parse()
-	if err != nil {
-		return err
-	}
-	err = c.Watch()
-	if err != nil {
-		return err
-	}
-
-	fmt.Println("done")
+var testAction = func(_ context.Context, cmd *cli.Command) error {
 	return nil
 }
