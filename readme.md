@@ -17,7 +17,7 @@ SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, co
 - extended config with `#tag:` keys
 - `$ ssm admin` will load only hosts w/ `#tag: admin`
 
-[CHANGELOG](changelog.md) outlines all features.
+[CHANGELOG](changelog.md) has more details.
 
 ## Key-binds
 ```
