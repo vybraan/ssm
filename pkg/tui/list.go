@@ -5,8 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/v2/key"
 	"github.com/charmbracelet/bubbles/v2/list"
-	lp "github.com/charmbracelet/lipgloss/v2"
-
+	lg "github.com/charmbracelet/lipgloss/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
 )
 
@@ -20,17 +19,17 @@ func (i item) FilterValue() string { return i.title + i.desc }
 
 func listFrom(config *sshconf.Config) list.Model {
 	var li list.Model
-	lightDark := lp.LightDark(true)
+	lightDark := lg.LightDark(true)
 	d := list.NewDefaultDelegate()
 	d.ShowDescription = true
 	d.SetSpacing(0)
-	d.Styles.SelectedTitle = lp.NewStyle().
-		Border(lp.NormalBorder(), false, false, false, true).
-		BorderForeground(lightDark(lp.Color("#F79F3F"), lp.Color("#00bfff"))).
-		Foreground(lightDark(lp.Color("#F79F3F"), lp.Color("#00bfff"))).
+	d.Styles.SelectedTitle = lg.NewStyle().
+		Border(lg.NormalBorder(), false, false, false, true).
+		BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
+		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
 		Padding(0, 0, 0, 1)
 	d.Styles.SelectedDesc = d.Styles.SelectedTitle.
-		Foreground(lightDark(lp.Color("#F79F3F"), lp.Color("#4682b4")))
+		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#4682b4")))
 
 	editKey := key.NewBinding(
 		key.WithKeys("ctrl+e"),
@@ -59,12 +58,12 @@ func listFrom(config *sshconf.Config) list.Model {
 		}
 	}
 
-	li.Styles.StatusBar = lp.NewStyle().
-		Foreground(lightDark(lp.Color("#A49FA5"), lp.Color("#777777"))).
+	li.Styles.StatusBar = lg.NewStyle().
+		Foreground(lightDark(lg.Color("#A49FA5"), lg.Color("#777777"))).
 		Padding(0, 0, 1, 2) //nolint:mnd
-	li.Styles.Title = lp.NewStyle().
-		Background(lp.Color("#4682b4")).
-		Foreground(lp.Color("230")).
+	li.Styles.Title = lg.NewStyle().
+		Background(lg.Color("#4682b4")).
+		Foreground(lg.Color("230")).
 		Padding(0, 1)
 	li.SetStatusBarItemName("host", "hosts")
 	li.Title = fmt.Sprintf("SSH servers (%v)", config.GetPath())
@@ -94,7 +93,15 @@ func listFrom(config *sshconf.Config) list.Model {
 				}
 				return ""
 			}
-			out := fmt.Sprintf("%s%s%s", user(), hostname(), port())
+			tags := func() string {
+				_tags := host.Options["#tag:"]
+				if _tags != "" {
+					s := lg.NewStyle().Foreground(lg.Color("8"))
+					return s.Render("#" + _tags)
+				}
+				return ""
+			}
+			out := fmt.Sprintf("%s%s%s %s", user(), hostname(), port(), tags())
 			return out
 		}()
 		newitem := item{

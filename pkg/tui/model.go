@@ -9,7 +9,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/v2/list"
 	tea "github.com/charmbracelet/bubbletea/v2"
-	lp "github.com/charmbracelet/lipgloss/v2"
+	lg "github.com/charmbracelet/lipgloss/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
 )
 
@@ -26,6 +26,9 @@ type Model struct {
 }
 
 type ReloadConfigMsg struct{}
+type FilterMsg struct {
+	Arg string
+}
 
 func NewModel(config *sshconf.Config, debug bool) *Model {
 	m := &Model{}
@@ -33,6 +36,7 @@ func NewModel(config *sshconf.Config, debug bool) *Model {
 	m.config = config
 	m.li = listFrom(config)
 	m.log = NewLog(WithDebug(debug))
+	m.sshCmd = "ssh"
 	return m
 }
 
@@ -50,12 +54,9 @@ func (m *Model) Init() tea.Cmd {
 	if m.debug {
 		cmds = append(cmds, AddLog("debug: isdarkbg %v", m.isDark))
 	}
-	m.sshCmd = "ssh"
 	m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.sshCmd))
-
 	// reload config on edit
 	cmds = append(cmds, m.watchCmd())
-
 	return tea.Batch(cmds...)
 }
 
@@ -64,19 +65,21 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmds := []tea.Cmd{}
 
 	switch msg := msg.(type) {
+	case FilterMsg:
+		m.li.SetFilterText(msg.Arg)
+		m.li.SetFilteringEnabled(true)
+		return m, nil
 	case ReloadConfigMsg:
 		m.li = listFrom(m.config)
 		return m, nil
 
 	case tea.BackgroundColorMsg:
 		m.isDark = msg.IsDark()
-
 	case tea.WindowSizeMsg:
 		m.li.SetSize(msg.Width, msg.Height-3)
 		if m.debug {
 			m.li.SetSize(msg.Width, msg.Height-9)
 		}
-
 	case tea.KeyPressMsg:
 		switch msg.Code {
 		case tea.KeyTab:
@@ -87,7 +90,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.sshCmd = "ssh"
 				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.sshCmd))
 			}
-
 		case tea.KeyEnter:
 			// connect
 			host, ok := m.li.SelectedItem().(item)
@@ -185,7 +187,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m *Model) View() string {
 	var out string
-	style := lp.NewStyle().
+	style := lg.NewStyle().
 		Margin(1, 0, 0, 1).
 		Render
 	out += style(m.li.View())
