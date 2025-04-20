@@ -2,8 +2,8 @@
 
 SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, command execution and file transfer.
 
-[![version][version-badge]][changelog.md]
-[![license][license-badge]][license.md]
+[![version][version-badge]](changelog.md)
+[![license][license-badge]](license.md)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 
 ## Features
