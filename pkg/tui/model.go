@@ -127,8 +127,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				execmd,
 				AddError(fmt.Errorf("%s", m.errbuf.String())),
 			)
-		case 'c':
-		// run command
 		case tea.KeyEscape:
 		case 'q':
 			if m.li.FilterState() != 1 {
@@ -158,7 +156,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						return ReloadConfigMsg{}
 					},
 				)
-			case 'c':
+			case 'r':
 				return m, AddError(fmt.Errorf("run command on host: not yet implemented"))
 			case 's':
 				return m, AddError(fmt.Errorf("sftp: not yet implemented"))
