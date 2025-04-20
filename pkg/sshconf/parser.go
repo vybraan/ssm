@@ -17,8 +17,8 @@ type Config struct {
 	// protects Hosts
 	mu    sync.Mutex
 	Hosts []Host
-	path  string
 	watch []string
+	path  string
 }
 
 type Host struct {
@@ -29,7 +29,7 @@ type Host struct {
 // Parse parses SSH config files from default known locations.
 // User: ~/.ssh/config
 // System: /etc/ssh/ssh_config
-// Parse also follows `Include` statements.
+// Parse also follows `Include` statements via recursion.
 func Parse() (*Config, error) {
 	path, err := defaultConfigPath()
 	if err != nil {
@@ -103,6 +103,11 @@ func (c *Config) Watch() error {
 	return nil
 }
 
+const (
+	commentPrefix = "#"
+	tagPrefix     = "#tag:"
+)
+
 func parse(path string) (*Config, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -115,7 +120,9 @@ func parse(path string) (*Config, error) {
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		// ignore empty or comment line
-		if line == "" || strings.HasPrefix(line, "#") {
+		if line == "" ||
+			strings.HasPrefix(line, commentPrefix) &&
+				!strings.HasPrefix(line, tagPrefix) {
 			continue
 		}
 		parts := strings.Fields(line)
