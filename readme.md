@@ -1,9 +1,10 @@
 # Secure Shell Manager
 
-SSM allows easy connection to SSH servers, hosts filtering, editing, command execution and file transfer.
+SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, command execution and file transfer.
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue)](license.md)
-[![Go Report Card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
+[![version][version-badge]][changelog.md]
+[![license][license-badge]][license.md]
+[![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 
 ## Features
 - vim keys navigation: jkhl, ctrl+d/u, g/G
@@ -11,8 +12,12 @@ SSM allows easy connection to SSH servers, hosts filtering, editing, command exe
 - filter through all your servers
 - simple connect and return flow
 - switch between SSH and MOSH with a tab
-- quickly edit loaded configs
+- quickly edit configs
 - create free root servers
+- extended config with `#tag:` keys
+- `$ ssm admin` will load only hosts w/ `#tag: admin`
+
+[CHANGELOG](changelog.md) outlines all features.
 
 ## Key-binds
 ```
@@ -81,3 +86,6 @@ I welcome pull & feature requests, don't hesitate. No rules, we discuss in the i
 
 ## License
 [MIT license](license.md)
+
+[version-badge]: https://img.shields.io/badge/version-0.1.0-blue.svg
+[license-badge]: https://img.shields.io/badge/license-MIT-blue
