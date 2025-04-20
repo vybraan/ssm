@@ -17,7 +17,7 @@ SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, co
 - extended config with `#tag:` keys
 - `$ ssm admin` will load only hosts w/ `#tag: admin`
 
-[CHANGELOG](changelog.md) has more details.
+See [CHANGELOG](changelog.md) for more info.
 
 ## Key-binds
 ```
@@ -58,6 +58,11 @@ git clone https://github.com/lfaoro/ssm.git \
   && make build \
   && bin/ssm
 ```
+
+## Help
+- [SSH config manual](https://man.openbsd.org/ssh_config.5)
+- [SSH config example](data/config_example)
+- [create SSH config script](scripts/create_config.sh)
 
 ## Road map
 - [ ] refactor
