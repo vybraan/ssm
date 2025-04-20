@@ -40,6 +40,13 @@ func Parse() (*Config, error) {
 
 // Parse parses SSH config file from custom location.
 func ParsePath(s string) (*Config, error) {
+	if !strings.HasPrefix(s, "/") {
+		wd, err := os.Getwd()
+		if err != nil {
+			return nil, err
+		}
+		s = filepath.Join(wd, s)
+	}
 	return parse(s)
 }
 
