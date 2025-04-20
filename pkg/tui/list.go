@@ -111,7 +111,7 @@ func listFrom(config *sshconf.Config) list.Model {
 		li.InsertItem(len(config.Hosts), newitem)
 	}
 	// ad for segfault
-	li.InsertItem(0, item{
+	li.InsertItem(len(config.Hosts), item{
 		title: "segfault.net",
 		desc:  "create free root server",
 	})
