@@ -6,7 +6,7 @@ SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, co
 [![license][license-badge]](license.md)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 
-![demo](data/demo.png) "Demo"
+![demo](data/demo.png)
 
 ## Features
 - vim keys navigation: jkhl, ctrl+d/u, g/G
