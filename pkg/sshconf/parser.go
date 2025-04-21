@@ -139,8 +139,11 @@ func parse(path string) (*Config, error) {
 		}
 		k, v := strings.ToLower(parts[0]), strings.Join(parts[1:], " ")
 		// remove comment suffixes
-		k = removeComments(k)
-		v = removeComments(v)
+		// when not a tag
+		if !strings.HasPrefix(line, tagPrefix) {
+			k = removeComments(k)
+			v = removeComments(v)
+		}
 		// recurse include files
 		if k == "include" {
 			if !strings.HasPrefix(v, "/") {
@@ -187,10 +190,10 @@ func parse(path string) (*Config, error) {
 }
 
 func removeComments(input string) string {
-	// Find index of '#' and take substring up to that point
+	// find index of '#' and take substring up to that point
 	if index := strings.Index(input, "#"); index != -1 {
 		return strings.TrimSpace(input[:index])
 	}
-	// If no '#' found, return trimmed input
+	// if no '#' found, return trimmed input
 	return strings.TrimSpace(input)
 }
