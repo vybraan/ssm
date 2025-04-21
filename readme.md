@@ -6,6 +6,8 @@ SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, co
 [![license][license-badge]](license.md)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 
+![demo](data/demo.png) "Demo"
+
 ## Features
 - vim keys navigation: jkhl, ctrl+d/u, g/G
 - auto-reload SSH config on change
@@ -65,7 +67,8 @@ git clone https://github.com/lfaoro/ssm.git \
 - [create SSH config script](scripts/create_config.sh)
 
 ## Road map
-- [ ] refactor
+- [x] extend ssh_config with tags
+- [x] `$ ssm tag` loads directly in tag filter
 - [ ] add port-forwarding UI
 - [ ] add run command on host
 - [ ] add multiple hosts selection
