@@ -95,5 +95,5 @@ I welcome pull & feature requests, don't hesitate. No rules, we discuss in the i
 ## License
 [MIT license](license.md)
 
-[version-badge]: https://img.shields.io/badge/version-0.1.1-blue.svg
+[version-badge]: https://img.shields.io/badge/version-0.1.2-blue.svg
 [license-badge]: https://img.shields.io/badge/license-MIT-blue
