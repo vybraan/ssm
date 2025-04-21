@@ -69,6 +69,7 @@ git clone https://github.com/lfaoro/ssm.git \
 ## Road map
 - [x] extend ssh_config with tags
 - [x] `$ ssm tag` loads directly in tag filter
+- [x] exit ssm on connection and free resources
 - [ ] add port-forwarding UI
 - [ ] add run command on host
 - [ ] add multiple hosts selection

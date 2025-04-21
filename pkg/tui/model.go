@@ -16,7 +16,11 @@ import (
 type Model struct {
 	config *sshconf.Config
 	li     list.Model
-	sshCmd string
+
+	//external command
+	ExtCmd    string
+	ExitOnCmd bool
+	ExitHost  string
 
 	debug bool
 	log   Log
@@ -26,6 +30,7 @@ type Model struct {
 }
 
 type ReloadConfigMsg struct{}
+type ExitOnConnMsg struct{}
 type FilterMsg struct {
 	Arg string
 }
@@ -36,7 +41,7 @@ func NewModel(config *sshconf.Config, debug bool) *Model {
 	m.config = config
 	m.li = listFrom(config)
 	m.log = NewLog(WithDebug(debug))
-	m.sshCmd = "ssh"
+	m.ExtCmd = "ssh"
 	return m
 }
 
@@ -54,7 +59,7 @@ func (m *Model) Init() tea.Cmd {
 	if m.debug {
 		cmds = append(cmds, AddLog("debug: isdarkbg %v", m.isDark))
 	}
-	m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.sshCmd))
+	m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.ExtCmd))
 	// reload config on edit
 	cmds = append(cmds, m.watchCmd())
 	return tea.Batch(cmds...)
@@ -65,6 +70,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmds := []tea.Cmd{}
 
 	switch msg := msg.(type) {
+	case ExitOnConnMsg:
+		m.ExitOnCmd = true
+		return m, nil
 	case FilterMsg:
 		m.li.SetFilterText(msg.Arg)
 		m.li.SetFilteringEnabled(true)
@@ -83,12 +91,12 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		switch msg.Code {
 		case tea.KeyTab:
-			if m.sshCmd == "ssh" {
-				m.sshCmd = "mosh"
-				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.sshCmd))
+			if m.ExtCmd == "ssh" {
+				m.ExtCmd = "mosh"
+				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.ExtCmd))
 			} else {
-				m.sshCmd = "ssh"
-				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.sshCmd))
+				m.ExtCmd = "ssh"
+				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.ExtCmd))
 			}
 		case tea.KeyEnter:
 			// connect
@@ -96,22 +104,26 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if !ok {
 				return m, AddError(fmt.Errorf("unable to find selected item: open bug report"))
 			}
-			sshcmd, err := exec.LookPath(m.sshCmd)
+			if m.ExitOnCmd {
+				m.ExitHost = host.title
+				return m, tea.Quit
+			}
+			sshPath, err := exec.LookPath(m.ExtCmd)
 			if err != nil {
-				return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.sshCmd, err))
+				return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.ExtCmd, err))
 			}
 			var cmd *exec.Cmd
-			cmd = exec.Command(sshcmd, host.title)
+			cmd = exec.Command(sshPath, host.title)
 			if host.title == "segfault.net" {
-				_sshcmd, err := exec.LookPath("sshpass")
+				_sshPath, err := exec.LookPath("sshpass")
 				if err != nil {
-					_sshcmd, err = exec.LookPath("ssh")
+					_sshPath, err = exec.LookPath("ssh")
 					if err != nil {
-						return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.sshCmd, err))
+						return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.ExtCmd, err))
 					}
-					cmd = exec.Command(_sshcmd, "root@segfault.net")
+					cmd = exec.Command(_sshPath, "root@segfault.net")
 				} else {
-					cmd = exec.Command(_sshcmd, "-p", "segfault", "ssh", "root@segfault.net")
+					cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", "root@segfault.net")
 				}
 			}
 			cmd.Stderr = &m.errbuf

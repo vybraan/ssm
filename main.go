@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
+	"sync"
+	"syscall"
 
 	tea "github.com/charmbracelet/bubbletea/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
@@ -66,6 +69,12 @@ func main() {
 				Usage:   "enable debug mode with verbose logging",
 				Value:   false,
 			},
+			&cli.BoolFlag{
+				Name:    "exit",
+				Aliases: []string{"e"},
+				Usage:   "ssm will exit after connecting to a host and free resources",
+				Value:   false,
+			},
 			&cli.StringFlag{
 				Name:    "config",
 				Aliases: []string{"c"},
@@ -116,20 +125,44 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 	p := tea.NewProgram(
 		m,
 		tea.WithOutput(os.Stderr))
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
-		_, err = p.Run()
+		defer wg.Done()
+		final, err := p.Run()
 		if err != nil {
 			e := fmt.Errorf("failed to run %v: %w", cmd.Name, err)
 			fmt.Println(e)
+			os.Exit(1)
 		}
-		os.Exit(0)
+		m, ok := final.(*tui.Model)
+		if !ok {
+			fmt.Println("you found a bug#1: open an issue")
+			os.Exit(1)
+		}
+		if m.ExitOnCmd {
+			sshPath, err := exec.LookPath(m.ExtCmd)
+			if err != nil {
+				fmt.Printf("can't find `%s` cmd in your path: %v\n", m.ExtCmd, err)
+				os.Exit(1)
+			}
+			fmt.Printf("ssm will exit and be replaced by %s\n", m.ExtCmd)
+			err = syscall.Exec(sshPath, []string{"ssh", m.ExitHost}, os.Environ())
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		}
 	}()
 	if filterArg != "" {
 		p.Send(tui.FilterMsg{
 			Arg: fmt.Sprintf("#%s", filterArg),
 		})
 	}
-	p.Wait()
+	if cmd.Bool("exit") {
+		p.Send(tui.ExitOnConnMsg{})
+	}
+	wg.Wait()
 	return nil
 }
 

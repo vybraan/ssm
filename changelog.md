@@ -1,3 +1,7 @@
+# [Next]
+- replaced demo.png
+- add exit flag `--exit / -e` makes ssm exit after connecting to a host
+
 # [0.1.2] - April 21, 2025
 - fix parsing of tag keys
 
