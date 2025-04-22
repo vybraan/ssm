@@ -1,5 +1,7 @@
 # Secure Shell Manager
 
+> Terminal UI for SSH
+
 SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, command execution and file transfer.
 
 [![version][version-badge]](changelog.md)
