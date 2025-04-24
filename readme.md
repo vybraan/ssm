@@ -102,5 +102,5 @@ Feature requests are also welcome and we're happy to implement your ideas.
 ## License
 [MIT license](license.md)
 
-[version-badge]: https://img.shields.io/badge/version-0.1.2-blue.svg
+[version-badge]: https://img.shields.io/badge/version-0.2.0-blue.svg
 [license-badge]: https://img.shields.io/badge/license-MIT-blue
