@@ -1,6 +1,10 @@
-# [0.2.0-next]
+# [0.2.0] April 24, 2025
 - add exit flag `--exit / -e`: ssm will exit after connecting to a host
 - add `ctrl+v`: view full config for selected host
+- add ordered map for config options
+- fix filtering hosts
+- improve cli helpfile
+- improve readme
 
 # [0.1.2] - April 21, 2025
 - fix parsing of tag keys
