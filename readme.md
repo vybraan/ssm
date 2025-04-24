@@ -20,6 +20,8 @@ SSM is an open source (MIT) SSH connection manager that helps engineers organize
 - create free root servers
 - extended config with `#tag:` keys
 - `$ ssm admin` will load only hosts w/ `#tag: admin`
+- `ssm --exit` will exit ssm once a conn is established
+- `ssm --show` or `ctrl+v` in the UI will show selected host config
 
 See [CHANGELOG](changelog.md) for more info.
 
@@ -73,9 +75,6 @@ git clone https://github.com/lfaoro/ssm.git \
 - [message me on Telegram](https://t.me/leonarth)
 
 ## Road map
-- [x] extend ssh_config with tags
-- [x] `$ ssm tag` loads directly in tag filter
-- [x] exit ssm on connection and free resources
 - [ ] add port-forwarding UI
 - [ ] add run command on host
 - [ ] add multiple hosts selection
