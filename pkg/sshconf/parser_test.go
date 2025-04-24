@@ -9,7 +9,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	cfg, err := sshconf.ParsePath("./config_test")
+	cfg, err := sshconf.ParsePath("../../data/config_example")
 	if err != nil {
 		log.Println(err)
 		t.FailNow()

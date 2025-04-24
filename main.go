@@ -65,15 +65,14 @@ func main() {
 				Name:        "tag",
 				UsageText:   "comma separated arguments for filtering #tag: hosts",
 				Destination: &filterTag,
-				Max:         1,
 			},
 		},
 
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
-				Name:    "debug",
-				Aliases: []string{"d"},
-				Usage:   "enable debug mode with verbose logging",
+				Name:    "show",
+				Aliases: []string{"s"},
+				Usage:   "always show config",
 				Value:   false,
 			},
 			&cli.BoolFlag{
@@ -82,16 +81,16 @@ func main() {
 				Usage:   "exit after connection",
 				Value:   false,
 			},
-			&cli.BoolFlag{
-				Name:    "show",
-				Aliases: []string{"s"},
-				Usage:   "always show config",
-				Value:   false,
-			},
 			&cli.StringFlag{
 				Name:    "config",
 				Aliases: []string{"c"},
 				Usage:   "custom config file path",
+			},
+			&cli.BoolFlag{
+				Name:    "debug",
+				Aliases: []string{"d"},
+				Usage:   "enable debug mode with verbose logging",
+				Value:   false,
 			},
 		},
 
@@ -150,7 +149,7 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 		}
 		m, ok := final.(*tui.Model)
 		if !ok {
-			fmt.Println("you found a bug#1: open an issue")
+			fmt.Println("you found bug#1: open an issue")
 			os.Exit(1)
 		}
 		if m.ExitOnCmd && m.ExitHost != "" {
