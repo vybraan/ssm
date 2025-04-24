@@ -1,10 +1,15 @@
 # Secure Shell Manager
 
-> Terminal UI for SSH
+> Terminal UI for SSH written in Go
 
 [![version][version-badge]](changelog.md)
 [![license][license-badge]](license.md)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
+[![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
+
+[version-badge]: https://img.shields.io/badge/version-0.2.0-blue.svg
+[license-badge]: https://img.shields.io/badge/license-MIT-blue
+[x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
 SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.
 
@@ -16,34 +21,35 @@ SSM is an open source (MIT) SSH connection manager that helps engineers organize
 - filter through all your servers
 - simple connect and return flow
 - switch between SSH and MOSH with a tab
-- quickly edit configs
-- create free root servers
-- extended config with `#tag:` keys
-- `$ ssm admin` will load only hosts w/ `#tag: admin`
+- quickly edit configs `<ctrl+e>`
+- create free root servers for research
+- extended config with `#tag:` keys, e.g.: `$ ssm admin` will load only hosts w/ `#tag: admin`
 - `ssm --exit` will exit ssm once a conn is established
-- `ssm --show` or `ctrl+v` in the UI will show selected host config
+- `ssm --show` or `ctrl+v` in the UI will show selected host params
 
-See [CHANGELOG](changelog.md) for more info.
+See [CHANGELOG](changelog.md) for more info. \
+See [HELP](help.md) for CLI flags.
 
 ## Key-binds
 ```
 <enter↵>       connect to selected host
+<ctrl+v>       show config for selected host
 <ctrl+e>       edit ssh configs
 <tab>          switch between SSH/MOSH
-</>            filter hosts
-<q>            quit
+</ or ?>       filter hosts
+<q / esc>      quit
 
 # under development (coming soon)
-ctrl+r       run commands on the server without starting a pty 
-ctrl+s       sftp upload/download files to/from server 
-ctrl+p       port-forwarding UI 
-space␣       select multiple hosts to interact with
+ctrl+r         run commands on the server without starting a pty 
+ctrl+s         sftp upload/download files to/from server 
+ctrl+p         port-forwarding UI 
+space␣         select multiple hosts to interact with
 ```
 
 ## Install
 
 Download `ssm` binary from [Releases](https://github.com/lfaoro/ssm/releases)
-> available for Linux, MacOS, Freebsd, Windows
+> available for Linux, MacOS, Freebsd (need more archs? just ask)
 
 ```bash
 # bash one-liner for linux/macos
@@ -85,7 +91,7 @@ git clone https://github.com/lfaoro/ssm.git \
 ## Contributing
 
 Pull requests are very welcome and will be merged.
-Feature requests are also welcome and we're happy to implement your ideas.
+Feature requests are also welcome, we're happy to implement your ideas.
 
 ### Support SSM
 
@@ -102,5 +108,3 @@ Feature requests are also welcome and we're happy to implement your ideas.
 ## License
 [MIT license](license.md)
 
-[version-badge]: https://img.shields.io/badge/version-0.2.0-blue.svg
-[license-badge]: https://img.shields.io/badge/license-MIT-blue
