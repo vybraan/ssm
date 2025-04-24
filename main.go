@@ -72,7 +72,13 @@ func main() {
 			&cli.BoolFlag{
 				Name:    "exit",
 				Aliases: []string{"e"},
-				Usage:   "ssm will exit after connecting to a host and free resources",
+				Usage:   "exit after connecting to a host",
+				Value:   false,
+			},
+			&cli.BoolFlag{
+				Name:    "info",
+				Aliases: []string{"i"},
+				Usage:   "always show config keys",
 				Value:   false,
 			},
 			&cli.StringFlag{
