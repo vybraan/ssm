@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/fsnotify/fsnotify"
+	som "github.com/thalesfsp/go-common-types/safeorderedmap"
 )
 
 type Config struct {
@@ -23,7 +24,7 @@ type Config struct {
 
 type Host struct {
 	Name    string
-	Options map[string]string
+	Options *som.SafeOrderedMap[string]
 }
 
 // Parse parses SSH config files from default known locations.
@@ -62,7 +63,11 @@ func (c *Config) GetHost(name string) Host {
 func (c *Config) GetParamFor(host Host, key string) string {
 	for _, h := range c.Hosts {
 		if h.Name == host.Name {
-			return h.Options[key]
+			val, ok := h.Options.Get(key)
+			if !ok {
+				return ""
+			}
+			return val
 		}
 	}
 	return ""
@@ -171,13 +176,13 @@ func parse(path string) (*Config, error) {
 			}
 			currentHost = &Host{
 				Name:    v,
-				Options: map[string]string{},
+				Options: som.New[string](),
 			}
 			continue
 		}
 		// if not a host key must be an option
 		if currentHost != nil {
-			currentHost.Options[k] = v
+			currentHost.Options.Add(k, v)
 		}
 	}
 	if currentHost != nil {

@@ -18,8 +18,8 @@ func TestParse(t *testing.T) {
 	for _, h := range cfg.Hosts {
 		fmt.Println(h)
 		fmt.Println(h.Name)
-		for k, v := range h.Options {
-			fmt.Println(k, v)
+		for i, k := range h.Options.Keys() {
+			fmt.Println(k, h.Options.Values()[i])
 		}
 	}
 	_, err = sshconf.ParsePath("./nonexistent")
