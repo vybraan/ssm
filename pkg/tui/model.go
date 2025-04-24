@@ -6,16 +6,21 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/v2/list"
+	"github.com/charmbracelet/bubbles/v2/viewport"
 	tea "github.com/charmbracelet/bubbletea/v2"
 	lg "github.com/charmbracelet/lipgloss/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
 )
 
 type Model struct {
-	config *sshconf.Config
-	li     list.Model
+	config     *sshconf.Config
+	showConfig bool
+
+	li list.Model
+	vp viewport.Model
 
 	//external command
 	ExtCmd    string
@@ -31,9 +36,10 @@ type Model struct {
 
 type ReloadConfigMsg struct{}
 type ExitOnConnMsg struct{}
-type FilterMsg struct {
+type FilterTagMsg struct {
 	Arg string
 }
+type ShowConfigMsg struct{}
 
 func NewModel(config *sshconf.Config, debug bool) *Model {
 	m := &Model{}
@@ -42,6 +48,10 @@ func NewModel(config *sshconf.Config, debug bool) *Model {
 	m.li = listFrom(config)
 	m.log = NewLog(WithDebug(debug))
 	m.ExtCmd = "ssh"
+	m.vp = viewport.New()
+	m.vp.SetWidth(40)
+	m.vp.SetHeight(20)
+	// m.vp.SetContent("test")
 	return m
 }
 
@@ -70,17 +80,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmds := []tea.Cmd{}
 
 	switch msg := msg.(type) {
-	case ExitOnConnMsg:
-		m.ExitOnCmd = true
-		return m, nil
-	case FilterMsg:
-		m.li.SetFilterText(msg.Arg)
-		m.li.SetFilteringEnabled(true)
-		return m, nil
-	case ReloadConfigMsg:
-		m.li = listFrom(m.config)
-		return m, nil
-
 	case tea.BackgroundColorMsg:
 		m.isDark = msg.IsDark()
 	case tea.WindowSizeMsg:
@@ -88,6 +87,20 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.debug {
 			m.li.SetSize(msg.Width, msg.Height-9)
 		}
+		m.vp.SetHeight(m.li.Height())
+		m.vp.SetWidth(msg.Width / 2)
+	case ExitOnConnMsg:
+		m.ExitOnCmd = true
+		return m, nil
+	case FilterTagMsg:
+		m.li.SetFilterText(msg.Arg)
+		m.li.SetFilteringEnabled(true)
+		return m, nil
+	case ReloadConfigMsg:
+		m.li = listFrom(m.config)
+		return m, nil
+	case ShowConfigMsg:
+		m.showConfig = true
 	case tea.KeyPressMsg:
 		switch msg.Code {
 		case tea.KeyTab:
@@ -100,6 +113,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case tea.KeyEnter:
 			// connect
+			if m.li.FilterState() == list.Filtering {
+				break
+			}
 			host, ok := m.li.SelectedItem().(item)
 			if !ok {
 				return m, AddError(fmt.Errorf("unable to find selected item: open bug report"))
@@ -172,6 +188,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, AddError(fmt.Errorf("run command on host: not yet implemented"))
 			case 's':
 				return m, AddError(fmt.Errorf("sftp: not yet implemented"))
+			case 'v':
+				m.showConfig = !m.showConfig
+				m.setConfig()
 			default:
 				return m, AddError(fmt.Errorf("that's an interesting key combo! %s", msg))
 			}
@@ -189,19 +208,50 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.li, cmd = m.li.Update(msg)
 	cmds = append(cmds, cmd)
 
+	if m.showConfig {
+		m.setConfig()
+	}
+	m.vp, cmd = m.vp.Update(msg)
+	cmds = append(cmds, cmd)
+
 	m.log, cmd = m.log.Update(msg)
 	cmds = append(cmds, cmd)
 
 	return m, tea.Batch(cmds...)
 }
 
+func (m *Model) setConfig() {
+	m.vp.SetContent("")
+	i := m.li.GlobalIndex()
+	host := m.config.Hosts[i]
+	var out string
+	keyStyle := lg.NewStyle().
+		Foreground(lg.Color("#4682b4"))
+	for i, k := range host.Options.Keys() {
+		k = strings.ToTitle(k)
+		k = keyStyle.Render(k)
+		out += fmt.Sprintf("%s %s\n", k, host.Options.Values()[i])
+	}
+	m.vp.SetContent(out)
+}
+
 func (m *Model) View() string {
 	var out string
-	style := lg.NewStyle().
-		Margin(1, 0, 0, 1).
-		Render
-	out += style(m.li.View())
-	out += style(m.log.View())
+	// style := lg.NewStyle().
+	// 	Margin(1, 0, 0, 1).
+	// 	Render
+	// out += style(m.li.View())
+	// out += style(m.log.View())
+	vertView := lg.JoinVertical(0, m.li.View(), m.log.View())
+	if m.debug {
+		border := lg.NewStyle().Border(lg.RoundedBorder(), true)
+		m.vp.Style = border
+	}
+	if m.showConfig {
+		out += lg.JoinHorizontal(0.2, vertView, m.vp.View())
+	} else {
+		out += vertView
+	}
 	return out
 }
 

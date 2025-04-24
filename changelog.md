@@ -1,6 +1,6 @@
-# [Next]
-- replaced demo.png
-- add exit flag `--exit / -e` makes ssm exit after connecting to a host
+# [0.2.0-next]
+- add exit flag `--exit / -e`: ssm will exit after connecting to a host
+- add `ctrl+v`: view full config for selected host
 
 # [0.1.2] - April 21, 2025
 - fix parsing of tag keys
@@ -27,3 +27,4 @@
 [0.1.0]: https://github.com/lfaoro/ssm/compare/0.0.1...0.1.0
 [0.1.1]: https://github.com/lfaoro/ssm/compare/0.1.0...0.1.1
 [0.1.2]: https://github.com/lfaoro/ssm/compare/0.1.1...0.1.2
+[0.2.0]: https://github.com/lfaoro/ssm/compare/0.1.2...0.2.0

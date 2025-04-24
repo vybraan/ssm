@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/mail"
 	"os"
 	"os/exec"
 	"sync"
@@ -15,28 +16,33 @@ import (
 	"golang.org/x/term"
 )
 
-var BuildVersion = "v0.0.1-dev"
+var BuildVersion = "0.0.0-dev"
 var BuildDate = "unset"
 var BuildSHA = "unset"
 
+// cli arguments
 var (
-	filterArg string
+	filterTag string
 )
 
 func main() {
 	appcmd := &cli.Command{
+		Name: "ssm",
 		Authors: []any{
-			map[string]string{
-				"name":  "Leonardo Faoro",
-				"email": "ssm@leonardofaoro.com",
+			&mail.Address{
+				Name:    "Leonardo Faoro",
+				Address: "ssm@leonardofaoro.com",
 			},
 		},
-		Name:                   "ssm",
 		EnableShellCompletion:  true,
 		UseShortOptionHandling: true,
 		Suggest:                true,
+		Copyright:              "Leonardo Faoro (MIT)",
+		UsageText:              "ssm [--options] [tag]\nexample: ssm --show --exit vpn\nexample: ssm -se vpn",
 
-		Version: fmt.Sprintf("%s\nbuild date: %s\nbuild SHA: %s", BuildVersion, BuildDate, BuildSHA),
+		Version: fmt.Sprintf(`%s
+	 build date: %s
+	 build SHA: %s`, BuildVersion, BuildDate, BuildSHA),
 		ExtraInfo: func() map[string]string {
 			return map[string]string{
 				"Build version": BuildVersion,
@@ -45,8 +51,8 @@ func main() {
 			}
 		},
 		Usage:       "Secure Shell Manager",
-		ArgsUsage:   "[filter]",
-		Description: "SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, command execution and file transfer.",
+		ArgsUsage:   "[tag]",
+		Description: "SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.",
 
 		Before: func(c context.Context, cmd *cli.Command) (context.Context, error) {
 			_ = cmd
@@ -56,8 +62,9 @@ func main() {
 		Action: mainCmd,
 		Arguments: []cli.Argument{
 			&cli.StringArg{
-				Name:        "filter",
-				Destination: &filterArg,
+				Name:        "tag",
+				UsageText:   "comma separated arguments for filtering #tag: hosts",
+				Destination: &filterTag,
 				Max:         1,
 			},
 		},
@@ -76,9 +83,9 @@ func main() {
 				Value:   false,
 			},
 			&cli.BoolFlag{
-				Name:    "info",
-				Aliases: []string{"i"},
-				Usage:   "always show config keys",
+				Name:    "show",
+				Aliases: []string{"s"},
+				Usage:   "always show config for host",
 				Value:   false,
 			},
 			&cli.StringFlag{
@@ -146,7 +153,7 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 			fmt.Println("you found a bug#1: open an issue")
 			os.Exit(1)
 		}
-		if m.ExitOnCmd {
+		if m.ExitOnCmd && m.ExitHost != "" {
 			sshPath, err := exec.LookPath(m.ExtCmd)
 			if err != nil {
 				fmt.Printf("can't find `%s` cmd in your path: %v\n", m.ExtCmd, err)
@@ -160,13 +167,16 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 			}
 		}
 	}()
-	if filterArg != "" {
-		p.Send(tui.FilterMsg{
-			Arg: fmt.Sprintf("#%s", filterArg),
+	if filterTag != "" {
+		p.Send(tui.FilterTagMsg{
+			Arg: fmt.Sprintf("#%s", filterTag),
 		})
 	}
 	if cmd.Bool("exit") {
 		p.Send(tui.ExitOnConnMsg{})
+	}
+	if cmd.Bool("show") {
+		p.Send(tui.ShowConfigMsg{})
 	}
 	wg.Wait()
 	return nil
