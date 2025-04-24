@@ -79,13 +79,13 @@ func main() {
 			&cli.BoolFlag{
 				Name:    "exit",
 				Aliases: []string{"e"},
-				Usage:   "exit after connecting to a host",
+				Usage:   "exit after connection",
 				Value:   false,
 			},
 			&cli.BoolFlag{
 				Name:    "show",
 				Aliases: []string{"s"},
-				Usage:   "always show config for host",
+				Usage:   "always show config",
 				Value:   false,
 			},
 			&cli.StringFlag{
