@@ -9,7 +9,7 @@ build:
 	@go mod tidy
 	CGO_ENABLED=0 go build ${FLAGS} ${LDFLAGS} -o ./bin/ .
 
-release: pre release-prod
+release: pre release-prod help
 release-check:
 	goreleaser check
 	goreleaser healthcheck
@@ -30,6 +30,9 @@ stop:
 	@pkill -9 dev.sh ||:
 	@pkill -9 inotify ||:
 	@pkill -9 ssm ||:
+
+help:
+	build/ssm_linux_amd64_v1/ssm --help >help.md
 
 clean:
 	rm -rf build/*
