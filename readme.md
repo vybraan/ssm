@@ -2,15 +2,15 @@
 
 > Terminal UI for SSH
 
-SSM allows easy connection to SSH servers, hosts filtering, editing, tagging, command execution and file transfer.
-
 [![version][version-badge]](changelog.md)
 [![license][license-badge]](license.md)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 
+SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.
+
 ![demo](data/demo.png)
 
-## Features
+## Notable features
 - vim keys navigation: jkhl, ctrl+d/u, g/G
 - auto-reload SSH config on change
 - filter through all your servers
@@ -40,19 +40,22 @@ space␣       select multiple hosts to interact with
 
 ## Install
 
+Download `ssm` binary from [Releases](https://github.com/lfaoro/ssm/releases)
+> available for Linux, MacOS, Freebsd, Windows
+
 ```bash
-# bash one-liner (linux/macos)
+# bash one-liner for linux/macos
 curl -sSL https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
 wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
 
-# brew (macos)
+# brew only for macos
 brew install lfaoro/tap/ssm
 
-# go install
+# go install (requires Go)
 go install github.com/lfaoro/ssm@latest
 ```
 
-## Build
+## Build from source
 
 > requires [Go](https://go.dev/doc/install)
 
@@ -67,6 +70,7 @@ git clone https://github.com/lfaoro/ssm.git \
 - [SSH config manual](https://man.openbsd.org/ssh_config.5)
 - [SSH config example](data/config_example)
 - [create SSH config script](scripts/create_config.sh)
+- [message me on Telegram](https://t.me/leonarth)
 
 ## Road map
 - [x] extend ssh_config with tags
@@ -81,11 +85,12 @@ git clone https://github.com/lfaoro/ssm.git \
 
 ## Contributing
 
-I welcome pull & feature requests, don't hesitate. No rules, we discuss in the issue. Shoot me with your best ideas, bugs & honest feedback.
+Pull requests are very welcome and will be merged.
+Feature requests are also welcome and we're happy to implement your ideas.
 
-## Help ssm grow
+### Support SSM
 
-> If ssm is useful to you, consider being useful to ssm.
+> If ssm is useful to you, kindly give us a star.
 
 - **star the repo**
 - **tell your friends**
