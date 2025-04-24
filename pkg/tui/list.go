@@ -35,11 +35,15 @@ func listFrom(config *sshconf.Config) list.Model {
 		key.WithKeys("ctrl+e"),
 		key.WithHelp("ctrl+e", "edit config"),
 	)
-	tabKey := key.NewBinding(
+	showKey := key.NewBinding(
+		key.WithKeys("ctrl+v"),
+		key.WithHelp("ctrl+v", "show config"),
+	)
+	switchKey := key.NewBinding(
 		key.WithKeys("tab"),
 		key.WithHelp("tab", "switch ssh/mosh"),
 	)
-	enterKey := key.NewBinding(
+	connectKey := key.NewBinding(
 		key.WithKeys("enter"),
 		key.WithHelp("enter", "connect"),
 	)
@@ -52,9 +56,10 @@ func listFrom(config *sshconf.Config) list.Model {
 	)
 	li.AdditionalFullHelpKeys = func() []key.Binding {
 		return []key.Binding{
+			connectKey,
+			switchKey,
 			editKey,
-			tabKey,
-			enterKey,
+			showKey,
 		}
 	}
 
@@ -73,28 +78,28 @@ func listFrom(config *sshconf.Config) list.Model {
 		}
 		fmtDescription := func() string {
 			port := func() string {
-				_port := host.Options["port"]
+				_port, _ := host.Options.Get("port")
 				if _port != "" {
 					return fmt.Sprintf(":%s", _port)
 				}
 				return ""
 			}
 			user := func() string {
-				_user := host.Options["user"]
+				_user, _ := host.Options.Get("user")
 				if _user != "" {
 					return _user + "@"
 				}
 				return ""
 			}
 			hostname := func() string {
-				_host := host.Options["hostname"]
+				_host, _ := host.Options.Get("hostname")
 				if _host != "" {
 					return _host
 				}
 				return ""
 			}
 			tags := func() string {
-				_tags := host.Options["#tag:"]
+				_tags, _ := host.Options.Get("#tag:")
 				if _tags != "" {
 					s := lg.NewStyle().Foreground(lg.Color("8"))
 					return s.Render("#" + _tags)
