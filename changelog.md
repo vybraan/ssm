@@ -1,3 +1,9 @@
+# [0.2.1] April 25, 2025
+- fix crash on segfault
+- remove windows release
+- upgrade deps
+- general improvements
+
 # [0.2.0] April 24, 2025
 - add exit flag `--exit / -e`: ssm will exit after connecting to a host
 - add `ctrl+v`: view full config for selected host
@@ -32,3 +38,4 @@
 [0.1.1]: https://github.com/lfaoro/ssm/compare/0.1.0...0.1.1
 [0.1.2]: https://github.com/lfaoro/ssm/compare/0.1.1...0.1.2
 [0.2.0]: https://github.com/lfaoro/ssm/compare/0.1.2...0.2.0
+[0.2.1]: https://github.com/lfaoro/ssm/compare/0.2.0...0.2.1
