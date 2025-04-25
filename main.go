@@ -37,8 +37,11 @@ func main() {
 		EnableShellCompletion:  true,
 		UseShortOptionHandling: true,
 		Suggest:                true,
-		Copyright:              "Leonardo Faoro (MIT)",
+		Copyright:              "(c) Leonardo Faoro (MIT)",
+		Usage:                  "Secure Shell Manager",
 		UsageText:              "ssm [--options] [tag]\nexample: ssm --show --exit vpn\nexample: ssm -se vpn",
+		ArgsUsage:              "[tag]",
+		Description:            "SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.",
 
 		Version: fmt.Sprintf(`%s
 	 build date: %s
@@ -50,9 +53,6 @@ func main() {
 				"Build sha":     BuildSHA,
 			}
 		},
-		Usage:       "Secure Shell Manager",
-		ArgsUsage:   "[tag]",
-		Description: "SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.",
 
 		Before: func(c context.Context, cmd *cli.Command) (context.Context, error) {
 			_ = cmd
