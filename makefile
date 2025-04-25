@@ -1,4 +1,4 @@
-include makefile.tag
+include data/makefile.tag
 
 FLAGS=-trimpath -buildvcs=false -tags='netgo,osusergo,static_build'
 LDFLAGS=-ldflags='-s -w -extldflags "-static"'
