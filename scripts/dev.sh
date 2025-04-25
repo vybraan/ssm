@@ -22,7 +22,7 @@ cleanup() {
 }
 trap cleanup SIGINT SIGTERM SIGQUIT
 
-start_app(){
+start_app() {
     reset
     export TERM=xterm-256color
     echo "starting ${APP}"
