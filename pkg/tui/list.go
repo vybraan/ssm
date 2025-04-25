@@ -88,7 +88,7 @@ func listFrom(config *sshconf.Config) list.Model {
 		fmtDescription := func() string {
 			port := func() string {
 				_port, _ := host.Options.Get("port")
-				if _port != "" {
+				if _port != "" && _port != "22" {
 					return fmt.Sprintf(":%s", _port)
 				}
 				return ""
