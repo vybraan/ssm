@@ -6,6 +6,7 @@
 [![license][license-badge]](license.md)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 [![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
+[![contributors](https://img.shields.io/github/all-contributors/lfaoro/ssm?color=ee8449&style=flat-square)](#contributors)
 
 [version-badge]: https://img.shields.io/badge/version-0.2.1-blue.svg
 [license-badge]: https://img.shields.io/badge/license-MIT-blue
@@ -88,10 +89,19 @@ git clone https://github.com/lfaoro/ssm.git \
 - [ ] add sftp with interactive files selector
 - [ ] add sftp to multiple hosts async
 
-## Contributing
+## Contributors
 
 Pull requests are very welcome and will be merged.
 Feature requests are also welcome, we're happy to implement your ideas.
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ### Support SSM
 
