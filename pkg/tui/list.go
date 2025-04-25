@@ -73,6 +73,14 @@ func listFrom(config *sshconf.Config) list.Model {
 		Padding(0, 1)
 	li.SetStatusBarItemName("host", "hosts")
 	li.Title = fmt.Sprintf("SSH servers (%v)", config.GetPath())
+	// add segfault.net (free root server provider)
+	segfaultHost := sshconf.Host{
+		Name:    "create a free research root server",
+		Options: safeorderedmap.New[string](),
+	}
+	segfaultHost.Options.Add("hostname", "segfault.net")
+	segfaultHost.Options.Add("user", "root")
+	config.Hosts = append(config.Hosts, segfaultHost)
 	for _, host := range config.Hosts {
 		if host.Name == "*" {
 			continue
@@ -116,15 +124,5 @@ func listFrom(config *sshconf.Config) list.Model {
 		}
 		li.InsertItem(len(config.Hosts), newitem)
 	}
-	// add segfault.net (free root server provider)
-	li.InsertItem(len(config.Hosts), item{
-		title: "segfault.net",
-		desc:  "create free root server",
-	})
-	config.Hosts = append(config.Hosts, sshconf.Host{
-		Name:    "segfault.net: free research server",
-		Options: &safeorderedmap.SafeOrderedMap[string]{},
-	})
-
 	return li
 }

@@ -130,16 +130,17 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			var cmd *exec.Cmd
 			cmd = exec.Command(sshPath, host.title)
-			if host.title == "segfault.net" {
+			if host.title == "create a free research root server" {
+				host.desc = strings.TrimSpace(host.desc)
 				_sshPath, err := exec.LookPath("sshpass")
 				if err != nil {
 					_sshPath, err = exec.LookPath("ssh")
 					if err != nil {
 						return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.ExtCmd, err))
 					}
-					cmd = exec.Command(_sshPath, "root@segfault.net")
+					cmd = exec.Command(_sshPath, host.desc)
 				} else {
-					cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", "root@segfault.net")
+					cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", host.desc)
 				}
 			}
 			cmd.Stderr = &m.errbuf
