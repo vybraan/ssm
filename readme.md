@@ -28,7 +28,7 @@ SSM is an open source (MIT) SSH connection manager that helps engineers organize
 - `ssm --show` or `ctrl+v` in the UI will show selected host params
 
 See [CHANGELOG](changelog.md) for more info. \
-See [HELP](help.md) for CLI flags.
+See [HELP](help) for CLI flags.
 
 ## Key-binds
 ```
