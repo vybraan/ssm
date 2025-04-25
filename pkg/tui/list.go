@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/v2/list"
 	lg "github.com/charmbracelet/lipgloss/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
+	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
 
 type item struct {
@@ -115,10 +116,14 @@ func listFrom(config *sshconf.Config) list.Model {
 		}
 		li.InsertItem(len(config.Hosts), newitem)
 	}
-	// ad for segfault
+	// add segfault.net (free root server provider)
 	li.InsertItem(len(config.Hosts), item{
 		title: "segfault.net",
 		desc:  "create free root server",
+	})
+	config.Hosts = append(config.Hosts, sshconf.Host{
+		Name:    "segfault.net: free research server",
+		Options: &safeorderedmap.SafeOrderedMap[string]{},
 	})
 
 	return li
