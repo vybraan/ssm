@@ -1,4 +1,6 @@
 bin/
 build/
+tmp/
+_*
 notes
 todo
