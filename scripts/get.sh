@@ -59,8 +59,6 @@ check_path() {
 # Configuration
 APP_NAME=ssm
 REPO="lfaoro/ssm"
-#Not used anywhere, if used externally, export it
-#LATEST_RELEASE_URL="https://github.com/${REPO}/releases/latest"
 DOWNLOAD_URL="https://github.com/${REPO}/releases/download"
 
 # get latest version
