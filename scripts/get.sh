@@ -19,39 +19,39 @@ error() {
 }
 
 is_writable() {
-    local directory temp_check
-    directory="$1"
-    if [[ ! -d "$directory" ]]; then return 1; fi
+    local path temp_check
+    path="$1"
+    if [[ ! -d "$path" ]]; then return 1; fi
     temp_check=$(mktemp -t install_check_XXXXXX) || error "failed to create temp file"
-    if ! mv "$temp_check" "$directory/" 2>/dev/null; then
+    if ! mv "$temp_check" "$path/" 2>/dev/null; then
         rm -f "$temp_check"
         return 1
     fi
-    rm -f "$directory/$(basename "$temp_check")"
+    rm -f "$path/$(basename "$temp_check")"
     return 0
 }
 
 check_permissions() {
-    local directory
-    directory="$1"
+    local path
+    path="$1"
     TEMP_FILE=$(mktemp -t install_XXXXXX) || error "failed to create temp file"
-    if ! mv "$TEMP_FILE" "$directory/" 2>/dev/null; then
-        echo "warning: no write permission in $directory"
+    if ! mv "$TEMP_FILE" "$path/" 2>/dev/null; then
+        echo "warning: no write permission in $path"
         INSTALL_DIR="$HOME/.local/bin"
         mkdir -p "$INSTALL_DIR" || error "failed to create $INSTALL_DIR"
     fi
-    rm -f "$directory/$(basename "$TEMP_FILE")" 2>/dev/null
+    rm -f "$path/$(basename "$TEMP_FILE")" 2>/dev/null
 }
 
 check_path() {
-    local directory
-    directory="$1"
-    if [[ ":$PATH:" != *":$directory:"* ]]; then
-        echo "Warning: $directory is not in your PATH"
+    local path
+    path="$1"
+    if [[ ":$PATH:" != *":$path:"* ]]; then
+        echo "Warning: $path is not in your PATH"
         case "$SHELL" in
-            *bash) echo "Run: echo 'export PATH=\$PATH:$directory' >> ~/.bashrc" ;;
-            *zsh)  echo "Run: echo 'export PATH=\$PATH:$directory' >> ~/.zshrc" ;;
-            *)     echo "Add $directory to your PATH" ;;
+            *bash) echo "Run: echo 'export PATH=\$PATH:$path' >> ~/.bashrc" ;;
+            *zsh)  echo "Run: echo 'export PATH=\$PATH:$path' >> ~/.zshrc" ;;
+            *)     echo "Add $path to your PATH" ;;
         esac
     fi
 }
@@ -114,11 +114,6 @@ case "${OS}" in
             INSTALL_DIR="$HOME/.local/bin"
         fi
         ;;
-    msys*|mingw*)
-        OS="windows"
-        ARCHIVE_NAME="${APP_NAME}_windows_${ARCH}.zip"
-        INSTALL_DIR="$HOME/bin"
-        ;;
     *) error "Unsupported operating system: ${OS}" ;;
 esac
 
@@ -149,49 +144,26 @@ fi
 TEMP_DIR=$(mktemp -d) || error "failed to create temporary directory"
 
 # Download and extract the archive
-if [[ "${OS}" =~ "windows" ]]; then
-    echo "Downloading Windows binary..."
-    if ! /usr/bin/curl -fsSL "${DOWNLOAD_ARCHIVE_URL}" -o "${TEMP_DIR}/${ARCHIVE_NAME}" --progress-bar; then
-        echo "Error: Failed to download Windows binary"
-        error "Download failed"
-    fi
-    echo "Extracting Windows binary..."
-    if ! unzip -q "${TEMP_DIR}/${ARCHIVE_NAME}" -d "${TEMP_DIR}"; then
-        echo "Error: Failed to extract Windows binary"
-        error "Failed to extract archive"
-    fi
-    echo "Installing Windows binary..."
-    if ! mv "${TEMP_DIR}/ssm" "${INSTALL_DIR}/${APP_NAME}.exe"; then
-        echo "Error: Failed to move Windows binary"
-        error "Failed to move binary"
-    fi
-    if ! chmod +x "${INSTALL_DIR}/${APP_NAME}.exe"; then
-        echo "Error: Failed to set executable permissions"
-        error "failed to set executable permissions"
-    fi
-    BINARY_PATH="${INSTALL_DIR}/${APP_NAME}.exe"
-else
-    echo "Downloading binary..."
-    if ! /usr/bin/curl -fsSL "${DOWNLOAD_ARCHIVE_URL}" -o "${TEMP_DIR}/${ARCHIVE_NAME}" --progress-bar; then
-        echo "Error: Failed to download binary"
-        error "Download failed"
-    fi
-    echo "Extracting binary..."
-    if ! tar -xzf "${TEMP_DIR}/${ARCHIVE_NAME}" -C "${TEMP_DIR}"; then
-        echo "Error: Failed to extract binary"
-        error "Failed to extract archive"
-    fi
-    echo "Installing binary..."
-    if ! mv "${TEMP_DIR}/ssm" "${INSTALL_DIR}/${APP_NAME}"; then
-        echo "Error: Failed to move binary"
-        error "Failed to move binary"
-    fi
-    if ! chmod +x "${INSTALL_DIR}/${APP_NAME}"; then
-        echo "Error: Failed to set executable permissions"
-        error "failed to set executable permissions"
-    fi
-    BINARY_PATH="${INSTALL_DIR}/${APP_NAME}"
+echo "Downloading binary..."
+if ! /usr/bin/curl -fsSL "${DOWNLOAD_ARCHIVE_URL}" -o "${TEMP_DIR}/${ARCHIVE_NAME}" --progress-bar; then
+    echo "Error: Failed to download binary"
+    error "Download failed"
 fi
+echo "Extracting binary..."
+if ! tar -xzf "${TEMP_DIR}/${ARCHIVE_NAME}" -C "${TEMP_DIR}"; then
+    echo "Error: Failed to extract binary"
+    error "Failed to extract archive"
+fi
+echo "Installing binary..."
+if ! mv "${TEMP_DIR}/ssm" "${INSTALL_DIR}/${APP_NAME}"; then
+    echo "Error: Failed to move binary"
+    error "Failed to move binary"
+fi
+if ! chmod +x "${INSTALL_DIR}/${APP_NAME}"; then
+    echo "Error: Failed to set executable permissions"
+    error "failed to set executable permissions"
+fi
+BINARY_PATH="${INSTALL_DIR}/${APP_NAME}"
 
 echo "Successfully installed ${APP_NAME} to: ${BINARY_PATH}"
 check_path "${INSTALL_DIR}"
