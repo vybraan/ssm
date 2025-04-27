@@ -1,6 +1,6 @@
 # Secure Shell Manager
 
-> Terminal UI for SSH written in Go
+> Streamline SSH with a simple Terminal UI
 
 [![version][version-badge]](changelog.md)
 [![license][license-badge]](license)
@@ -15,17 +15,17 @@ SSM is an open source (MIT) SSH connection manager that helps engineers organize
 
 ![demo](data/demo.png)
 
-## Notable features
+## Features
 - vim keys navigation: jkhl, ctrl+d/u, g/G
 - auto-reload SSH config on change
 - filter through all your servers
 - simple connect and return flow
 - switch between SSH and MOSH with a tab
 - quickly edit configs `<ctrl+e>`
-- create free root servers for research
-- extended config with `#tag:` keys, e.g.: `$ ssm admin` will load only hosts w/ `#tag: admin`
+- extend config with `#tag:`, e.g.: `$ ssm admin` will load only hosts w/ `#tag: admin`
 - `ssm --exit` will exit ssm once a conn is established
 - `ssm --show` or `ctrl+v` in the UI will show selected host params
+- create free root servers for research
 
 See [CHANGELOG](changelog.md) for more info. \
 See [HELP](data/help) for CLI flags.
@@ -49,18 +49,13 @@ space␣         select multiple hosts to interact with
 ## Install
 
 Download `ssm` binary from [Releases](https://github.com/lfaoro/ssm/releases)
-> available for Linux, MacOS, FreeBSD, NetBSD, OpenBSD, Solaris on x86_64, i386, arm64, arm architectures
+> available for Linux, MacOS, FreeBSD, NetBSD, OpenBSD, Solaris
+> on x86_64, i386, arm64, arm architectures
 
 ```bash
 # bash one-liner for linux/macos
 curl -sSL https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
 wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
-
-# brew only for macos
-brew install lfaoro/tap/ssm
-
-# go install (requires Go)
-go install github.com/lfaoro/ssm@latest
 ```
 
 ## Build from source
@@ -68,6 +63,10 @@ go install github.com/lfaoro/ssm@latest
 > requires [Go](https://go.dev/doc/install)
 
 ```bash
+# bootstrap it
+go install github.com/lfaoro/ssm@latest
+
+# or build it manually
 git clone https://github.com/lfaoro/ssm.git \
   && cd ssm \
   && make build \
@@ -79,14 +78,6 @@ git clone https://github.com/lfaoro/ssm.git \
 - [SSH config example](data/config_example)
 - [create SSH config script](scripts/create_config.sh)
 - [message me on Telegram](https://t.me/leonarth)
-
-## Road map
-- [ ] add port-forwarding UI
-- [ ] add run command on host
-- [ ] add multiple hosts selection
-- [ ] add run commands on multiple hosts asynchronously
-- [ ] add sftp with interactive files selector
-- [ ] add sftp to multiple hosts async
 
 ## Contributors
 
