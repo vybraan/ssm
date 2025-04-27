@@ -3,13 +3,12 @@
 > Terminal UI for SSH written in Go
 
 [![version][version-badge]](changelog.md)
-[![license][license-badge]](license.md)
+[![license][license-badge]](license)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
+[![contributors](https://img.shields.io/github/all-contributors/lfaoro/ssm?color=ee8449)](#contributors)
 [![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
-[![contributors](https://img.shields.io/github/all-contributors/lfaoro/ssm?color=ee8449&style=flat-square)](#contributors)
-
 [version-badge]: https://img.shields.io/badge/version-0.2.1-blue.svg
-[license-badge]: https://img.shields.io/badge/license-MIT-blue
+[license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
 SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.
@@ -38,7 +37,7 @@ See [HELP](data/help) for CLI flags.
 <ctrl+e>       edit ssh configs
 <tab>          switch between SSH/MOSH
 </ or ?>       filter hosts
-<q / esc>      quit
+<q or esc>     quit
 
 # under development (coming soon)
 ctrl+r         run commands on the server without starting a pty 
@@ -50,7 +49,7 @@ space␣         select multiple hosts to interact with
 ## Install
 
 Download `ssm` binary from [Releases](https://github.com/lfaoro/ssm/releases)
-> available for Linux, MacOS, Freebsd (need more archs? just ask)
+> available for Linux, MacOS, FreeBSD, NetBSD, OpenBSD, Solaris on x86_64, i386, arm64, arm architectures
 
 ```bash
 # bash one-liner for linux/macos
@@ -94,15 +93,6 @@ git clone https://github.com/lfaoro/ssm.git \
 Pull requests are very welcome and will be merged.
 Feature requests are also welcome, we're happy to implement your ideas.
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
 ### Support SSM
 
 > If ssm is useful to you, kindly give us a star.
@@ -114,7 +104,3 @@ Feature requests are also welcome, we're happy to implement your ideas.
 - [FIAT sponsor](https://checkout.revolut.com/pay/1122870b-1836-42e7-942b-90a99ef5e457)
 - [BTC sponsor](https://mempool.space/address/bc1qzaqeqwklaq86uz8h2lww87qwfpnyh9fveyh3hs)
 - [XMR sponsor](https://xmrchain.net/search?value=9XCyahmZiQgcVwjrSZTcJepPqCxZgMqwbABvzPKVpzC7gi8URDme8H6UThpCqX69y5i1aA81AKq57Wynjovy7g4K9MeY5c)
-
-## License
-[MIT license](license.md)
-

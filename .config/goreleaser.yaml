@@ -17,9 +17,14 @@ builds:
       - linux
       - darwin
       - freebsd
+      - netbsd
+      - openbsd
+      - solaris
     goarch:
       - amd64
+      - 386
       - arm64
+      - arm
     tags:
       - netgo
       - osusergo

@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Leonardo Faoro & authors
+// SPDX-License-Identifier: BSD-3-Clause
+
 package main
 
 import (
@@ -95,6 +98,7 @@ func main() {
 		},
 
 		Commands: []*cli.Command{
+			generateCmd,
 			testCmd,
 		},
 	}
@@ -187,5 +191,14 @@ var testCmd = &cli.Command{
 	Hidden: true,
 }
 var testAction = func(_ context.Context, cmd *cli.Command) error {
+	return nil
+}
+var generateCmd = &cli.Command{
+	Name:    "generate",
+	Aliases: []string{"gen"},
+	Action:  generateAction,
+	Hidden:  true,
+}
+var generateAction = func(_ context.Context, cmd *cli.Command) error {
 	return nil
 }

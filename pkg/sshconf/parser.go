@@ -1,4 +1,7 @@
-// sshconf loads, parses and watches SSH config files,
+// Copyright (c) 2025 Leonardo Faoro & authors
+// SPDX-License-Identifier: BSD-3-Clause
+
+// Package sshconf loads, parses and watches SSH config files,
 // tries to be thread-safe.
 // ref: https://man.openbsd.org/ssh_config.5
 package sshconf
@@ -18,6 +21,7 @@ type Config struct {
 	// protects Hosts
 	mu    sync.Mutex
 	Hosts []Host
+
 	watch []string
 	path  string
 }
