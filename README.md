@@ -5,7 +5,6 @@
 [![version][version-badge]](changelog.md)
 [![license][license-badge]](license)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
-[![contributors](https://img.shields.io/github/all-contributors/lfaoro/ssm?color=ee8449)](#contributors)
 [![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
 
 [version-badge]: https://img.shields.io/badge/version-0.2.1-blue.svg
