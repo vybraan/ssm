@@ -130,7 +130,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 			}
 			var cmd *exec.Cmd
-			cmd = exec.Command(sshPath, host.title)
+			cmd = exec.Command(sshPath, host.title, "-F", m.config.GetPath())
 			if host.title == "create a free research root server" {
 				host.desc = strings.TrimSpace(host.desc)
 				_sshPath, err := exec.LookPath("sshpass")
