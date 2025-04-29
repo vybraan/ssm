@@ -36,7 +36,7 @@ See [HELP](data/help) for CLI flags.
 <ctrl+v>       show config for selected host
 <ctrl+e>       edit ssh configs
 <tab>          switch between SSH/MOSH
-</ or ?>       filter hosts
+< / >          filter hosts
 <q or esc>     quit
 
 # under development (coming soon)
