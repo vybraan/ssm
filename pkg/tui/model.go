@@ -22,8 +22,7 @@ type Model struct {
 	li list.Model
 	vp viewport.Model
 
-	//external command
-	ExtCmd    string
+	Cmd       SysCmd
 	ExitOnCmd bool
 	ExitHost  string
 
@@ -34,44 +33,34 @@ type Model struct {
 	isDark bool
 }
 
-type ReloadConfigMsg struct{}
-type ExitOnConnMsg struct{}
-type FilterTagMsg struct {
-	Arg string
-}
-type ShowConfigMsg struct{}
-
 func NewModel(config *sshconf.Config, debug bool) *Model {
 	m := &Model{}
 	m.debug = debug
 	m.config = config
 	m.li = listFrom(config)
 	m.log = NewLog(WithDebug(debug))
-	m.ExtCmd = "ssh"
+	m.Cmd = ssh // defaults to ssh
 	m.vp = viewport.New()
 	m.vp.SetWidth(40)
 	m.vp.SetHeight(20)
-	// m.vp.SetContent("test")
 	return m
 }
 
 func (m *Model) Init() tea.Cmd {
 	cmds := []tea.Cmd{
 		tea.SetWindowTitle("SSM | Secure Shell Manager"),
-		// tea.SetBackgroundColor(color.Black),
 		tea.RequestKeyboardEnhancements(),
 		tea.EnterAltScreen,
 		tea.EnableBracketedPaste,
 		tea.EnableReportFocus,
+		// tea.SetBackgroundColor(color.Black),
 		// tea.EnableMouseAllMotion,
 		// tea.EnableMouseCellMotion,
 	}
 	if m.debug {
 		cmds = append(cmds, AddLog("debug: isdarkbg %v", m.isDark))
 	}
-	m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.ExtCmd))
-	// reload config on edit
-	cmds = append(cmds, m.watchCmd())
+	m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 	return tea.Batch(cmds...)
 }
 
@@ -91,28 +80,33 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.vp.SetWidth(msg.Width / 2)
 	case ExitOnConnMsg:
 		m.ExitOnCmd = true
-		return m, nil
+		return m, AddLog("exit true")
 	case FilterTagMsg:
 		m.li.SetFilterText(msg.Arg)
 		m.li.SetFilteringEnabled(true)
-		return m, nil
+		return m, AddLog("filter true")
 	case ReloadConfigMsg:
-		m.li = listFrom(m.config)
-		return m, nil
+		conf, err := sshconf.ParsePath(m.config.GetPath())
+		if err != nil {
+			return m, AddError(err)
+		}
+		m.li = listFrom(conf)
+		m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
+		return m, AddLog("reloading config")
 	case ShowConfigMsg:
 		m.showConfig = true
+		return m, nil
 	case tea.KeyPressMsg:
 		switch msg.Code {
 		case tea.KeyTab:
-			if m.ExtCmd == "ssh" {
-				m.ExtCmd = "mosh"
-				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.ExtCmd))
+			if m.Cmd == ssh {
+				m.Cmd = mosh
+				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 			} else {
-				m.ExtCmd = "ssh"
-				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.ExtCmd))
+				m.Cmd = ssh
+				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 			}
 		case tea.KeyEnter:
-			// connect
 			if m.li.FilterState() == list.Filtering {
 				break
 			}
@@ -124,9 +118,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.ExitHost = host.title
 				return m, tea.Quit
 			}
-			sshPath, err := exec.LookPath(m.ExtCmd)
+			sshPath, err := exec.LookPath(m.Cmd.String())
 			if err != nil {
-				return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.ExtCmd, err))
+				return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 			}
 			var cmd *exec.Cmd
 			cmd = exec.Command(sshPath, host.title)
@@ -136,7 +130,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if err != nil {
 					_sshPath, err = exec.LookPath("ssh")
 					if err != nil {
-						return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.ExtCmd, err))
+						return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 					}
 					cmd = exec.Command(_sshPath, host.desc)
 				} else {
@@ -168,7 +162,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch msg.Code {
 			case 'e':
 				confFile := m.config.GetPath()
-				cmd := exec.Command(os.Getenv("EDITOR"), confFile)
+				editorEnv := os.Getenv("EDITOR")
+				if editorEnv == "" {
+					return m, AddError(fmt.Errorf("env EDITOR not set; e.g. export EDITOR=vim"))
+				}
+				cmd := exec.Command(editorEnv, confFile)
 				cmd.Dir = filepath.Dir(confFile)
 				cmd.Stderr = &m.errbuf
 				execCmd := tea.ExecProcess(cmd, func(err error) tea.Msg {
@@ -254,17 +252,4 @@ func (m *Model) View() string {
 		out += vertView
 	}
 	return out
-}
-
-func (m *Model) watchCmd() tea.Cmd {
-	return func() tea.Msg {
-		err := m.config.Watch()
-		if err != nil {
-			return tea.Batch(
-				AddError(err),
-				AddLog("%v", err),
-			)
-		}
-		return nil
-	}
 }
