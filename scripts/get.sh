@@ -87,7 +87,7 @@ case "${ARCH}" in
 esac
 case "${OS}" in
     linux)
-        ARCHIVE_NAME="${APP_NAME}_linux_${ARCH}.tgz"
+        ARCHIVE_NAME="${APP_NAME}_${VERSION}_linux_${ARCH}.tgz"
         if is_writable "/usr/local/bin"; then
             INSTALL_DIR="/usr/local/bin"
         else
