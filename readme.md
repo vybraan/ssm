@@ -13,6 +13,8 @@
 
 SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.
 
+**tl;dr** - [try it now](#Quickstart)
+
 ![demo](data/demo.png)
 
 ## Features
@@ -46,7 +48,7 @@ ctrl+p         port-forwarding UI
 space␣         select multiple hosts to interact with
 ```
 
-## Quick start
+## Quickstart
 > If you're not accustomed to ssh config start here otherwise skip to [install](#install)
 ```bash
 # backup any existing config
