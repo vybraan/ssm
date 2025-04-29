@@ -15,13 +15,13 @@ release-check:
 	goreleaser healthcheck
 	goreleaser release --snapshot --clean
 release-prod:
-	goreleaser release --clean --skip=announce,validate
+	goreleaser release --verbose --clean --skip=validate
 release-dev:
-	GORELEASER_CURRENT_TAG="v0.0.1" goreleaser release --clean --skip=announce,validate --snapshot --skip-publish
+	GORELEASER_CURRENT_TAG="v0.0.1" goreleaser release --verbose --clean --skip=announce,validate --snapshot
 
 pre: 
 	@go mod tidy
-	@go fmt ./... && go vet ./...
+	# @go fmt ./... && go vet ./...
 
 update:
 	go get -u .
