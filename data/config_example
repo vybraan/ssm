@@ -1,31 +1,16 @@
 # Example SSH config
-# Host hostname1
-# tag: tagValue1,tagValue2,tagN
-#     SSH_OPTION value
-#     SSH_OPTION value
 #
 # $ man ssh_config
 
-Host *
-	  User root
-	  AddKeysToAgent no
-	  HashKnownHosts no
+Host hostname1
+#tag: tagValue1,tagValue2,tagN
+    User user
+    HostName hello.world
 
-Host free
-#tag: sf
-    User root
-    HostName adm.segfault.net
-    IdentityFile ~/.ssh/id_sf-adm-segfault-net
-    SetEnv SECRET=MySuperSecret
-    LocalForward 5900 0:5900
-
-Host vip
-#tag: sf
-    User root
-    HostName adm.segfault.net
-    IdentityFile ~/.ssh/id_sf-adm-segfault-net
-    SetEnv SECRET=MySuperSecret
-    LocalForward 5900 0:5900
+Host terminalcoffee
+#tag: shops
+    User primeagen
+    HostName terminal.shop
 
 host srv1
 #tag: prod
