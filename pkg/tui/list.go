@@ -75,7 +75,7 @@ func listFrom(config *sshconf.Config) list.Model {
 	li.Title = fmt.Sprintf("SSH servers (%v)", config.GetPath())
 	// add segfault.net (free root server provider)
 	segfaultHost := sshconf.Host{
-		Name:    "create a free research root server",
+		Name:    "create free research root server",
 		Options: safeorderedmap.New[string](),
 	}
 	segfaultHost.Options.Add("hostname", "segfault.net")
