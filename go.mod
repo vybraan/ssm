@@ -7,6 +7,7 @@ require (
 	github.com/charmbracelet/bubbletea/v2 v2.0.0-beta1
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta1
 	github.com/fsnotify/fsnotify v1.9.0
+	github.com/google/go-github v17.0.0+incompatible
 	github.com/thalesfsp/go-common-types v0.2.4
 	github.com/urfave/cli/v3 v3.2.0
 	golang.org/x/term v0.31.0
@@ -20,6 +21,8 @@ require (
 	github.com/charmbracelet/x/input v0.3.4 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.1 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect

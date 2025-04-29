@@ -1,5 +1,8 @@
 package tui
 
+type AppMsg struct {
+	Text string
+}
 type ShowConfigMsg struct{}
 type ReloadConfigMsg struct{}
 type LivenessCheckMsg struct{}

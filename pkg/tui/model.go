@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Leonardo Faoro & authors
+// SPDX-License-Identifier: BSD-3-Clause
+
+// Package tui defines the terminal user interface of this application.
 package tui
 
 import (
@@ -78,6 +82,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m.vp.SetHeight(m.li.Height())
 		m.vp.SetWidth(msg.Width / 2)
+
+	case AppMsg:
+		return m, AddError(fmt.Errorf("%s", msg.Text))
 	case ExitOnConnMsg:
 		m.ExitOnCmd = true
 		return m, AddLog("exit true")

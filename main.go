@@ -13,6 +13,7 @@ import (
 	"syscall"
 
 	tea "github.com/charmbracelet/bubbletea/v2"
+	"github.com/google/go-github/github"
 	"github.com/lfaoro/ssm/pkg/sshconf"
 	"github.com/lfaoro/ssm/pkg/tui"
 	"github.com/urfave/cli/v3"
@@ -46,9 +47,7 @@ func main() {
 		ArgsUsage:              "[tag]",
 		Description:            "SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.",
 
-		Version: fmt.Sprintf(`%s
-	 build date: %s
-	 build SHA: %s`, BuildVersion, BuildDate, BuildSHA),
+		Version: BuildVersion,
 		ExtraInfo: func() map[string]string {
 			return map[string]string{
 				"Build version": BuildVersion,
@@ -157,12 +156,12 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 			os.Exit(1)
 		}
 		if m.ExitOnCmd && m.ExitHost != "" {
-			sshPath, err := exec.LookPath(m.ExtCmd)
+			sshPath, err := exec.LookPath(m.Cmd.String())
 			if err != nil {
-				fmt.Printf("can't find `%s` cmd in your path: %v\n", m.ExtCmd, err)
+				fmt.Printf("can't find `%s` cmd in your path: %v\n", m.Cmd, err)
 				os.Exit(1)
 			}
-			fmt.Printf("ssm will exit and be replaced by %s\n", m.ExtCmd)
+			fmt.Printf("ssm will exit and be replaced by %s\n", m.Cmd)
 			err = syscall.Exec(sshPath, []string{"ssh", m.ExitHost}, os.Environ())
 			if err != nil {
 				fmt.Println(err)
@@ -181,6 +180,20 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 	if cmd.Bool("show") {
 		p.Send(tui.ShowConfigMsg{})
 	}
+	// inform user when new version is available
+	go func() {
+		tag, err := latestTag()
+		if err != nil {
+			if cmd.Bool("debug") {
+				fmt.Println(err)
+			}
+			return
+		}
+		if tag != cmd.Version {
+			msg := fmt.Sprintf("%s: new version %s is available", cmd.Version, tag)
+			p.Send(tui.AppMsg{Text: msg})
+		}
+	}()
 	wg.Wait()
 	return nil
 }
@@ -201,4 +214,21 @@ var generateCmd = &cli.Command{
 }
 var generateAction = func(_ context.Context, cmd *cli.Command) error {
 	return nil
+}
+
+func latestTag() (string, error) {
+	client := github.NewClient(nil)
+	owner := "lfaoro"
+	repo := "ssm"
+
+	tags, _, err := client.Repositories.ListTags(context.Background(), owner, repo, &github.ListOptions{PerPage: 1})
+	if err != nil {
+		return "", fmt.Errorf("failed to list tags: %v", err)
+	}
+
+	if len(tags) == 0 {
+		return "", fmt.Errorf("no tags found in the repository")
+	}
+
+	return *tags[0].Name, nil
 }
