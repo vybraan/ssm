@@ -74,7 +74,7 @@ func main() {
 			&cli.BoolFlag{
 				Name:    "show",
 				Aliases: []string{"s"},
-				Usage:   "always show config",
+				Usage:   "always show config params",
 				Value:   false,
 			},
 			&cli.BoolFlag{
