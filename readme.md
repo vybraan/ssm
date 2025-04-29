@@ -46,9 +46,34 @@ ctrl+p         port-forwarding UI
 space␣         select multiple hosts to interact with
 ```
 
+## Quick start
+> If you're not accustomed to ssh config start here otherwise skip to [install](#install)
+```bash
+# backup any existing config
+[ -f ~/.ssh/config ] && cp ~/.ssh/config ~/.ssh/config.bak
+# create ssh config
+cat <<EOF >>~/.ssh/config
+Host MyBigBeautiful
+#tag: companyA
+  HostName sandbox.companyA.com
+  User leo
+  Port 22
+  IdentityFile ~/.ssh/id_rsa
+
+Host TheBigAndUglyOne
+#tag: companyA
+  HostName prod.companyA.com
+  User root
+  Port 2222
+  IdentityFile ~/.ssh/id_rsa_prod
+EOF
+# file must have 600 perms for security
+chmod 600 ~/.ssh/config
+```
+
 ## Install
 
-Download `ssm` binary from [Releases](https://github.com/lfaoro/ssm/releases)
+Download `ssm` binary from [releases](https://github.com/lfaoro/ssm/releases)
 > available for Linux, MacOS, FreeBSD, NetBSD, OpenBSD, Solaris
 > on x86_64, i386, arm64, arm architectures
 
