@@ -1,5 +1,7 @@
 # [0.2.2] April 29, 2025
 - return error when EDITOR env is not set
+- add version check
+- inform via msg when new version is released
 - improve codebase
 
 # [0.2.1] April 25, 2025
