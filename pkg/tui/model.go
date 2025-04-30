@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/charmbracelet/bubbles/v2/list"
 	"github.com/charmbracelet/bubbles/v2/viewport"
@@ -65,6 +66,7 @@ func (m *Model) Init() tea.Cmd {
 		cmds = append(cmds, AddLog("debug: isdarkbg %v", m.isDark))
 	}
 	m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
+	cmds = append(cmds, tick())
 	return tea.Batch(cmds...)
 }
 
@@ -82,9 +84,23 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m.vp.SetHeight(m.li.Height())
 		m.vp.SetWidth(msg.Width / 2)
-
+	case tickMsg:
+		return m, tea.Batch(tick(),
+			AddLog("ticking..."))
 	case AppMsg:
 		return m, AddError(fmt.Errorf("%s", msg.Text))
+	case LivenessCheckMsg:
+		// TODO: not implemented
+		return m, AddLog("liveness check")
+		for _, h := range m.config.Hosts {
+			host, _ := h.Options.Get("hostname")
+			// resolve host
+			// ping server
+			_ = host
+			h.Options.Add("alive", "yes")
+		}
+		m.li = listFrom(m.config)
+		return m, nil
 	case ExitOnConnMsg:
 		m.ExitOnCmd = true
 		return m, AddLog("exit true")
@@ -104,6 +120,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.showConfig = true
 		return m, nil
 	case tea.KeyPressMsg:
+		if m.li.FilterState() == list.Filtering {
+			break
+		}
 		switch msg.Code {
 		case tea.KeyTab:
 			if m.Cmd == ssh {
@@ -114,47 +133,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 			}
 		case tea.KeyEnter:
-			if m.li.FilterState() == list.Filtering {
-				break
-			}
-			host, ok := m.li.SelectedItem().(item)
-			if !ok {
-				return m, AddError(fmt.Errorf("unable to find selected item: open bug report"))
-			}
-			if m.ExitOnCmd {
-				m.ExitHost = host.title
-				return m, tea.Quit
-			}
-			sshPath, err := exec.LookPath(m.Cmd.String())
-			if err != nil {
-				return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
-			}
-			var cmd *exec.Cmd
-			cmd = exec.Command(sshPath, host.title, "-F", m.config.GetPath())
-			if host.title == "create a free research root server" {
-				host.desc = strings.TrimSpace(host.desc)
-				_sshPath, err := exec.LookPath("sshpass")
-				if err != nil {
-					_sshPath, err = exec.LookPath("ssh")
-					if err != nil {
-						return m, AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
-					}
-					cmd = exec.Command(_sshPath, host.desc)
-				} else {
-					cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", host.desc)
-				}
-			}
-			cmd.Stderr = &m.errbuf
-			execmd := tea.ExecProcess(cmd, func(err error) tea.Msg {
-				return tea.Batch(
-					AddError(
-						fmt.Errorf("connection closed: %v, err: %v", host.title, err),
-					),
-					AddError(fmt.Errorf("%s", m.errbuf.String())),
-				)
-			})
+			conncmd := m.connect()
 			return m, tea.Batch(
-				execmd,
+				conncmd,
 				AddError(fmt.Errorf("%s", m.errbuf.String())),
 			)
 		case tea.KeyEscape:
@@ -226,8 +207,47 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
+func (m *Model) connect() tea.Cmd {
+	host, ok := m.li.SelectedItem().(item)
+	if !ok {
+		return AddError(fmt.Errorf("unable to find selected item: open bug report"))
+	}
+	if m.ExitOnCmd {
+		m.ExitHost = host.title
+		return tea.Quit
+	}
+	sshPath, err := exec.LookPath(m.Cmd.String())
+	if err != nil {
+		return AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
+	}
+	var cmd *exec.Cmd
+	cmd = exec.Command(sshPath, host.title, "-F", m.config.GetPath())
+	if host.title == "create free research root server" {
+		host.desc = strings.TrimSpace(host.desc)
+		_sshPath, err := exec.LookPath("sshpass")
+		if err != nil {
+			_sshPath, err = exec.LookPath("ssh")
+			if err != nil {
+				return AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
+			}
+			cmd = exec.Command(_sshPath, host.desc)
+		} else {
+			cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", host.desc)
+		}
+	}
+	cmd.Stderr = &m.errbuf
+	execmd := tea.ExecProcess(cmd, func(err error) tea.Msg {
+		return tea.Batch(
+			AddError(
+				fmt.Errorf("connection closed: %v, err: %v", host.title, err),
+			),
+			AddError(fmt.Errorf("%s", m.errbuf.String())),
+		)
+	})
+	return execmd
+}
+
 func (m *Model) setConfig() {
-	m.vp.SetContent("")
 	i := m.li.GlobalIndex()
 	host := m.config.Hosts[i]
 	var out string
@@ -252,6 +272,11 @@ func (m *Model) View() string {
 	if m.debug {
 		border := lg.NewStyle().Border(lg.RoundedBorder(), true)
 		m.vp.Style = border
+	} else {
+		border := lg.NewStyle().
+			Padding(2).
+			Border(lg.HiddenBorder(), true)
+		m.vp.Style = border
 	}
 	if m.showConfig {
 		out += lg.JoinHorizontal(0.2, vertView, m.vp.View())
@@ -259,4 +284,10 @@ func (m *Model) View() string {
 		out += vertView
 	}
 	return out
+}
+
+func tick() tea.Cmd {
+	return tea.Tick(time.Second, func(time.Time) tea.Msg {
+		return tickMsg{}
+	})
 }

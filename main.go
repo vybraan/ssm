@@ -83,6 +83,14 @@ func main() {
 				Usage:   "exit after connection",
 				Value:   false,
 			},
+			&cli.BoolFlag{
+				// TODO: not implemented
+				Name:    "ping",
+				Aliases: []string{"p"},
+				Usage:   "ping hosts and show liveness",
+				Value:   false,
+				Hidden:  true,
+			},
 			&cli.StringFlag{
 				Name:    "config",
 				Aliases: []string{"c"},
@@ -179,6 +187,9 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 	}
 	if cmd.Bool("show") {
 		p.Send(tui.ShowConfigMsg{})
+	}
+	if cmd.Bool("ping") {
+		p.Send(tui.LivenessCheckMsg{})
 	}
 	// inform user when new version is available
 	go func() {
