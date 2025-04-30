@@ -7,7 +7,7 @@ USAGE:
    example: ssm -se vpn
 
 VERSION:
-   0.3.0
+   0.3.1
 
 DESCRIPTION:
    SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.
