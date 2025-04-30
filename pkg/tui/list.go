@@ -5,6 +5,8 @@ import (
 
 	"github.com/charmbracelet/bubbles/v2/key"
 	"github.com/charmbracelet/bubbles/v2/list"
+	"github.com/charmbracelet/bubbles/v2/textinput"
+	tea "github.com/charmbracelet/bubbletea/v2"
 	lg "github.com/charmbracelet/lipgloss/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
 	"github.com/thalesfsp/go-common-types/safeorderedmap"
@@ -32,23 +34,6 @@ func listFrom(config *sshconf.Config) list.Model {
 	d.Styles.SelectedDesc = d.Styles.SelectedTitle.
 		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#4682b4")))
 
-	editKey := key.NewBinding(
-		key.WithKeys("ctrl+e"),
-		key.WithHelp("ctrl+e", "edit config"),
-	)
-	showKey := key.NewBinding(
-		key.WithKeys("ctrl+v"),
-		key.WithHelp("ctrl+v", "show config"),
-	)
-	switchKey := key.NewBinding(
-		key.WithKeys("tab"),
-		key.WithHelp("tab", "switch ssh/mosh"),
-	)
-	connectKey := key.NewBinding(
-		key.WithKeys("enter"),
-		key.WithHelp("enter", "connect"),
-	)
-
 	li = list.New(
 		[]list.Item{},
 		d,
@@ -56,14 +41,16 @@ func listFrom(config *sshconf.Config) list.Model {
 		0,
 	)
 	li.AdditionalFullHelpKeys = func() []key.Binding {
-		return []key.Binding{
-			connectKey,
-			switchKey,
-			editKey,
-			showKey,
-		}
+		return initKeys()
 	}
-
+	li.FilterInput.Prompt = "Search: "
+	li.FilterInput.CharLimit = 12
+	li.FilterInput.VirtualCursor = true
+	li.FilterInput.Placeholder = "hostName or tagName"
+	li.FilterInput.Styles.Cursor = textinput.CursorStyle{
+		Color: lg.BrightBlue,
+		Shape: tea.CursorBlock,
+	}
 	li.Styles.StatusBar = lg.NewStyle().
 		Foreground(lightDark(lg.Color("#A49FA5"), lg.Color("#777777"))).
 		Padding(0, 0, 1, 2) //nolint:mnd
@@ -125,4 +112,29 @@ func listFrom(config *sshconf.Config) list.Model {
 		li.InsertItem(len(config.Hosts), newitem)
 	}
 	return li
+}
+
+func initKeys() []key.Binding {
+	editKey := key.NewBinding(
+		key.WithKeys("ctrl+e"),
+		key.WithHelp("ctrl+e", "edit config"),
+	)
+	showKey := key.NewBinding(
+		key.WithKeys("ctrl+v"),
+		key.WithHelp("ctrl+v", "show config"),
+	)
+	switchKey := key.NewBinding(
+		key.WithKeys("tab"),
+		key.WithHelp("tab", "switch ssh/mosh"),
+	)
+	connectKey := key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "connect"),
+	)
+	return []key.Binding{
+		connectKey,
+		switchKey,
+		editKey,
+		showKey,
+	}
 }
