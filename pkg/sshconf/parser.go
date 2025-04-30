@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Leonardo Faoro & authors
 // SPDX-License-Identifier: BSD-3-Clause
 
-// Package sshconf loads, parses and watches SSH config files,
+// Package sshconf loads, parses SSH config files,
 // tries to be thread-safe.
 // ref: https://man.openbsd.org/ssh_config.5
 package sshconf
@@ -13,7 +13,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/fsnotify/fsnotify"
 	som "github.com/thalesfsp/go-common-types/safeorderedmap"
 )
 
@@ -21,8 +20,6 @@ type Config struct {
 	// protects Hosts
 	mu    sync.Mutex
 	Hosts []Host
-
-	watch []string
 	path  string
 }
 
@@ -83,42 +80,6 @@ func (c *Config) GetPath() string {
 	return c.path
 }
 
-func (c *Config) Watch() error {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-	defer watcher.Close()
-	for _, path := range c.watch {
-		err = watcher.Add(path)
-		if err != nil {
-			return err
-		}
-	}
-	for event := range watcher.Events {
-		// fmt.Printf("detected event %v %v\n", event.Name, event.Op)
-		if event.Has(fsnotify.Write) || event.Has(fsnotify.Rename) {
-			// add path again to watcher in case editors rename the file
-			// changing the inode
-			err = watcher.Add(event.Name)
-			if err != nil {
-				return err
-			}
-
-			c.mu.Lock()
-			// fmt.Println("reloading")
-			conf, err := parse(c.path)
-			if err != nil {
-				c.mu.Unlock()
-				return err
-			}
-			c.Hosts = conf.Hosts
-			c.mu.Unlock()
-		}
-	}
-	return nil
-}
-
 const (
 	commentPrefix = "#"
 	tagPrefix     = "#tag:"
@@ -165,7 +126,6 @@ func parse(path string) (*Config, error) {
 			}
 
 			for _, path := range paths {
-				config.watch = append(config.watch, path)
 				cfg, err := parse(path) // recursion
 				if err != nil {
 					return nil, err
