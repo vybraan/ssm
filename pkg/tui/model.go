@@ -151,6 +151,16 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// we're only interested in ctrl+<key>
 		case tea.ModCtrl:
 			switch msg.Code {
+			// emacs keybinds
+			case 'p':
+				m.li.CursorUp()
+			case 'n':
+				m.li.CursorDown()
+			case 'b':
+				m.li.PrevPage()
+			case 'f':
+				m.li.NextPage()
+
 			case 'e':
 				confFile := m.config.GetPath()
 				editorEnv := os.Getenv("EDITOR")
