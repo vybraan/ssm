@@ -1,4 +1,7 @@
-# [0.3.0] future
+# [0.3.1] April 30, 2025
+- fix exithost invalid character ssh error
+
+# [0.3.0] April 30, 2025
 - add cursor while filtering
 - restructure codebase
 
@@ -52,3 +55,4 @@
 [0.2.1]: https://github.com/lfaoro/ssm/compare/0.2.0...0.2.1
 [0.2.2]: https://github.com/lfaoro/ssm/compare/0.2.1...0.2.2
 [0.3.0]: https://github.com/lfaoro/ssm/compare/0.2.2...0.3.0
+[0.3.1]: https://github.com/lfaoro/ssm/compare/0.3.0...0.3.1

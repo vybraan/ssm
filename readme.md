@@ -7,7 +7,7 @@
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 [![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
 
-[version-badge]: https://img.shields.io/badge/version-0.3.0-blue.svg
+[version-badge]: https://img.shields.io/badge/version-0.3.1-blue.svg
 [license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
