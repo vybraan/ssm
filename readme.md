@@ -7,7 +7,7 @@
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 [![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
 
-[version-badge]: https://img.shields.io/badge/version-0.3.1-blue.svg
+[version-badge]: https://img.shields.io/badge/version-0.3.2-blue.svg
 [license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
@@ -18,16 +18,17 @@ SSM is an SSH connection manager that helps engineers organize servers, connect,
 ![demo](data/demo.png)
 
 ## Features
-- vim keys navigation: jkhl, ctrl+d/u, g/G
+- vim keys: jkhl, ctrl+d/u, g/G
+- emacs keys: ctrl+p/n/b/f(up/down/left/right)
 - filter through all your servers
+- group servers using tags `#tag: admin`
+- show only tagged servers `ssm admin`
 - simple connect and return flow
 - switch between SSH and MOSH with a tab
 - quickly edit configs `<ctrl+e>`
 - auto-reload SSH config on change
-- extend config with `#tag:`, e.g.: `$ ssm admin` will show only `#tag: admin` hosts
-- `ssm --exit` will exit ssm after a connection is established
-- `ssm --show` or `ctrl+v` in the UI, will show config params for the selected host
-- shortflags support e.g. `ssm -se vpn`
+- `ctrl+v` shows all config params for selected host
+- short-flags support e.g. `ssm -se` enables `--exit` and `--show`
 
 See [CHANGELOG](changelog.md) for more info. \
 See [HELP](data/help) for CLI flags.
@@ -44,7 +45,7 @@ See [HELP](data/help) for CLI flags.
 # under development (coming soon)
 ctrl+r         run commands on the server without starting a pty 
 ctrl+s         sftp upload/download files to/from server 
-ctrl+p         port-forwarding UI 
+ctrl+g         port-forwarding UI 
 space␣         select multiple hosts to interact with
 ```
 
