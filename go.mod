@@ -6,7 +6,6 @@ require (
 	github.com/charmbracelet/bubbles/v2 v2.0.0-beta.1
 	github.com/charmbracelet/bubbletea/v2 v2.0.0-beta1
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta1
-	github.com/fsnotify/fsnotify v1.9.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/thalesfsp/go-common-types v0.2.4
 	github.com/urfave/cli/v3 v3.3.2
