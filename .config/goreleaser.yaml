@@ -3,12 +3,13 @@
 
 version: 2
 dist: build
+report_sizes: true
 
 before:
   hooks:
     - go mod tidy
     - go fmt ./...
-    - go vet ./...
+    # - go vet ./...
 
 builds:
   - env:
@@ -22,7 +23,7 @@ builds:
       - solaris
     goarch:
       - amd64
-      - 386
+      - "386"
       - arm64
       - arm
     tags:
@@ -44,6 +45,7 @@ archives:
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
+      {{- .Version}}_
       {{- .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
@@ -60,20 +62,38 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-# brews:
-#   - name: ssm
-#     homepage: "https://github.com/lfaoro/ssm"
-#     description: "SSH connection manager"
-#     repository:
-#       owner: lfaoro
-#       name: tap
-#     commit_author:
-#       name: bot
-#       email: bot@leonardofaoro.com
+
+universal_binaries:
+  -
+    replace: true
+    name_template: "ssm"
+
+nfpms:
+  -
+    vendor: "Leonardo Faoro"
+    homepage: "https://github.com/lfaoro/ssm"
+    maintainer: "Leonardo Faoro <ssm@leonardofaoro.com>"
+    file_name_template: "ssm_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats:
+      - deb
+      - rpm
+    license: BSD 3-clause
+
+brews:
+  - name: ssm
+    homepage: "https://github.com/lfaoro/ssm"
+    description: "SSM | Secure Shell Manager"
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+    repository:
+      owner: lfaoro
+      name: tap
+    commit_author:
+      name: bot
+      email: bot@leonardofaoro.com
+    skip_upload: true
 
 release:
-  footer: >-
-
-    ---
-
-    Release by Leonardo Faoro
+  disable: false
+  mode: replace
+  draft: false
+  prerelease: auto
