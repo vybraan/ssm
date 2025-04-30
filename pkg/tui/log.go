@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea/v2"
 	"github.com/charmbracelet/lipgloss/v2"
@@ -136,10 +137,16 @@ func (l Log) View() string {
 		out = l.DebugStyle.Render(out)
 		return out
 	}
-	out := errMsg() + "\n" + debugMsg()
+	var out string
+	if !l.debugActive {
+		out = errMsg() + "\n" + debugMsg()
+	} else {
+		out = errMsg()
+	}
+	out = strings.TrimSpace(out)
 	return lipgloss.NewStyle().
-		Padding(0).
-		Border(lipgloss.NormalBorder(), l.debugActive).
+		Padding(0, 0, 0, 1).
+		Border(lipgloss.HiddenBorder(), true).
 		BorderForeground(lipgloss.Color("240")).
 		Render(out)
 }
