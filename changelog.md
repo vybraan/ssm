@@ -1,3 +1,8 @@
+# [0.3.2] April 30, 2025
+- fix error/log message alignment
+- add emacs keys: ctrl+p/n/b/f(up/down/left/right)
+- update libraries
+
 # [0.3.1] April 30, 2025
 - fix exithost invalid character ssh error
 - exit filtering on enter key if prompt is empty
@@ -59,3 +64,4 @@
 [0.2.2]: https://github.com/lfaoro/ssm/compare/0.2.1...0.2.2
 [0.3.0]: https://github.com/lfaoro/ssm/compare/0.2.2...0.3.0
 [0.3.1]: https://github.com/lfaoro/ssm/compare/0.3.0...0.3.1
+[0.3.2]: https://github.com/lfaoro/ssm/compare/0.3.1...0.3.2
