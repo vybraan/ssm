@@ -175,6 +175,9 @@ func parse(path string) (*Config, error) {
 		}
 		// all blocks must start with Host key
 		if k == "host" {
+			if strings.Contains(v, "*") {
+				continue
+			}
 			if currentHost != nil {
 				config.Hosts = append(config.Hosts, *currentHost)
 			}
