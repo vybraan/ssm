@@ -213,7 +213,7 @@ func (m *Model) connect() tea.Cmd {
 		return AddError(fmt.Errorf("unable to find selected item: open bug report"))
 	}
 	if m.ExitOnCmd {
-		m.ExitHost = host.title
+		m.ExitHost = strings.TrimSpace(host.desc)
 		return tea.Quit
 	}
 	sshPath, err := exec.LookPath(m.Cmd.String())
@@ -230,7 +230,7 @@ func (m *Model) connect() tea.Cmd {
 			if err != nil {
 				return AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 			}
-			cmd = exec.Command(_sshPath, host.desc)
+			cmd = exec.Command(_sshPath, host.title, "-F", m.config.GetPath())
 		} else {
 			cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", host.desc)
 		}
