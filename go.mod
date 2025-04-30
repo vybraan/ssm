@@ -9,14 +9,14 @@ require (
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/thalesfsp/go-common-types v0.2.4
-	github.com/urfave/cli/v3 v3.2.0
+	github.com/urfave/cli/v3 v3.3.2
 	golang.org/x/term v0.31.0
 )
 
 require (
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/charmbracelet/colorprofile v0.3.1 // indirect
-	github.com/charmbracelet/x/ansi v0.8.0 // indirect
+	github.com/charmbracelet/x/ansi v0.9.2 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
 	github.com/charmbracelet/x/input v0.3.4 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
