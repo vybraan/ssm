@@ -69,49 +69,51 @@ func listFrom(config *sshconf.Config) list.Model {
 	segfaultHost.Options.Add("user", "root")
 	config.Hosts = append(config.Hosts, segfaultHost)
 	for _, host := range config.Hosts {
-		if host.Name == "*" {
-			continue
-		}
-		fmtDescription := func() string {
-			port := func() string {
-				_port, _ := host.Options.Get("port")
-				if _port != "" && _port != "22" {
-					return fmt.Sprintf(":%s", _port)
-				}
-				return ""
-			}
-			user := func() string {
-				_user, _ := host.Options.Get("user")
-				if _user != "" {
-					return _user + "@"
-				}
-				return ""
-			}
-			hostname := func() string {
-				_host, _ := host.Options.Get("hostname")
-				if _host != "" {
-					return _host
-				}
-				return ""
-			}
-			tags := func() string {
-				_tags, _ := host.Options.Get("#tag:")
-				if _tags != "" {
-					s := lg.NewStyle().Foreground(lg.Color("8"))
-					return s.Render("#" + _tags)
-				}
-				return ""
-			}
-			out := fmt.Sprintf("%s%s%s %s", user(), hostname(), port(), tags())
-			return out
-		}()
-		newitem := item{
-			title: host.Name,
-			desc:  fmtDescription,
-		}
+		newitem := formatHost(host)
 		li.InsertItem(len(config.Hosts), newitem)
 	}
 	return li
+}
+
+func formatHost(host sshconf.Host) item {
+	fmtDescription := func() string {
+		port := func() string {
+			_port, _ := host.Options.Get("port")
+			if _port != "" && _port != "22" {
+				return fmt.Sprintf(":%s", _port)
+			}
+			return ""
+		}
+		user := func() string {
+			_user, _ := host.Options.Get("user")
+			if _user != "" {
+				return _user + "@"
+			}
+			return ""
+		}
+		hostname := func() string {
+			_host, _ := host.Options.Get("hostname")
+			if _host != "" {
+				return _host
+			}
+			return ""
+		}
+		tags := func() string {
+			_tags, _ := host.Options.Get("#tag:")
+			if _tags != "" {
+				s := lg.NewStyle().Foreground(lg.Color("8"))
+				return s.Render("#" + _tags)
+			}
+			return ""
+		}
+		out := fmt.Sprintf("%s%s%s %s", user(), hostname(), port(), tags())
+		return out
+	}()
+	newitem := item{
+		title: host.Name,
+		desc:  fmtDescription,
+	}
+	return newitem
 }
 
 func initKeys() []key.Binding {

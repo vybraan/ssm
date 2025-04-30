@@ -267,7 +267,6 @@ func (m *Model) setConfig() {
 	keyStyle := lg.NewStyle().
 		Foreground(lg.Color("#4682b4"))
 	for i, k := range host.Options.Keys() {
-		k = strings.ToTitle(k)
 		k = keyStyle.Render(k)
 		out += fmt.Sprintf("%s %s\n", k, host.Options.Values()[i])
 	}

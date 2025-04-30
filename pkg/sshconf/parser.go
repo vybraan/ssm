@@ -18,9 +18,11 @@ import (
 
 type Config struct {
 	// protects Hosts
-	mu    sync.Mutex
-	Hosts []Host
-	path  string
+	mu             sync.Mutex
+	Hosts          []Host // higher priority
+	secondaryHosts []Host // lower priority
+
+	path string
 }
 
 type Host struct {
@@ -81,8 +83,9 @@ func (c *Config) GetPath() string {
 }
 
 const (
-	commentPrefix = "#"
-	tagPrefix     = "#tag:"
+	commentPrefix  = "#"
+	tagPrefix      = "#tag:"
+	tagOrderPrefix = "#tagorder"
 )
 
 func parse(path string) (*Config, error) {
@@ -93,9 +96,14 @@ func parse(path string) (*Config, error) {
 	defer f.Close()
 	config := &Config{Hosts: []Host{}, path: path}
 	scanner := bufio.NewScanner(f)
+	var tagOrder bool
 	var currentHost *Host
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+		// set priority
+		if line == tagOrderPrefix {
+			tagOrder = true
+		}
 		// ignore empty or comment line
 		if line == "" ||
 			strings.HasPrefix(line, commentPrefix) &&
@@ -139,7 +147,7 @@ func parse(path string) (*Config, error) {
 				continue
 			}
 			if currentHost != nil {
-				config.Hosts = append(config.Hosts, *currentHost)
+				newHost(tagOrder, currentHost, config)
 			}
 			currentHost = &Host{
 				Name:    v,
@@ -153,12 +161,25 @@ func parse(path string) (*Config, error) {
 		}
 	}
 	if currentHost != nil {
-		config.Hosts = append(config.Hosts, *currentHost)
+		newHost(tagOrder, currentHost, config)
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, err
 	}
+	config.Hosts = append(config.Hosts, config.secondaryHosts...)
 	return config, nil
+}
+
+func newHost(tagOrder bool, currentHost *Host, config *Config) {
+	if tagOrder {
+		if currentHost.Options.Contains("#tag:") {
+			config.Hosts = append(config.Hosts, *currentHost)
+		} else {
+			config.secondaryHosts = append(config.secondaryHosts, *currentHost)
+		}
+		return
+	}
+	config.Hosts = append(config.Hosts, *currentHost)
 }
 
 func removeComments(input string) string {
