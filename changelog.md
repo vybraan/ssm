@@ -1,5 +1,8 @@
 # [0.3.1] April 30, 2025
 - fix exithost invalid character ssh error
+- exit filtering on enter key if prompt is empty
+- remove watcher from parser
+- skip parsing wildcard(*) hosts
 
 # [0.3.0] April 30, 2025
 - add cursor while filtering
