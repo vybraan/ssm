@@ -120,9 +120,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.showConfig = true
 		return m, nil
 	case tea.KeyPressMsg:
-		if m.li.FilterState() == list.Filtering {
-			break
-		}
 		switch msg.Code {
 		case tea.KeyTab:
 			if m.Cmd == ssh {
@@ -133,6 +130,12 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 			}
 		case tea.KeyEnter:
+			if m.li.FilterState() == list.Filtering {
+				if m.li.FilterValue() == "" {
+					m.li.ResetFilter()
+				}
+				break
+			}
 			conncmd := m.connect()
 			return m, tea.Batch(
 				conncmd,
