@@ -1,3 +1,7 @@
+# [0.3.0] future
+- add cursor while filtering
+- restructure codebase
+
 # [0.2.2] April 29, 2025
 - return error when EDITOR env is not set
 - add version check
@@ -47,3 +51,4 @@
 [0.2.0]: https://github.com/lfaoro/ssm/compare/0.1.2...0.2.0
 [0.2.1]: https://github.com/lfaoro/ssm/compare/0.2.0...0.2.1
 [0.2.2]: https://github.com/lfaoro/ssm/compare/0.2.1...0.2.2
+[0.3.0]: https://github.com/lfaoro/ssm/compare/0.2.2...0.3.0
