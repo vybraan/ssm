@@ -13,11 +13,10 @@ release: pre release-prod help
 release-check:
 	goreleaser check
 	goreleaser healthcheck
-	goreleaser release --snapshot --clean
-release-prod:
+release-prod: release-check
 	goreleaser release --verbose --clean --skip=validate
 release-dev:
-	GORELEASER_CURRENT_TAG="v0.0.1" goreleaser release --verbose --clean --skip=announce,validate --snapshot
+	goreleaser release --verbose --snapshot --clean
 
 pre: 
 	@go mod tidy
@@ -38,6 +37,7 @@ clean:
 	rm -rf build/*
 
 backup: 
+	rm -rf build/*
 	tar -czvf ../ssm-$(shell date +%Y%m%d).tgz --exclude='.git' .
 
 .PHONY: build
