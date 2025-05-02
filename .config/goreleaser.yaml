@@ -78,6 +78,11 @@ nfpms:
       - deb
       - rpm
     license: BSD 3-clause
+    dependencies:
+      - ssh
+    suggests:
+      - sshpass
+      - mosh
 
 brews:
   - name: ssm
@@ -91,6 +96,21 @@ brews:
       name: bot
       email: bot@leonardofaoro.com
     skip_upload: true
+
+snapcrafts:
+  - description: "SSM | Secure Shell Manager"
+    summary: "SSM | Secure Shell Manager"
+    hooks:
+      install:
+        - network
+    confinement: classic
+    plugs:
+      personal-files:
+        read:
+          - $HOME/.ssh/
+
+binary_signs:
+  - signature: "${artifact}_sig"  
 
 release:
   disable: false
