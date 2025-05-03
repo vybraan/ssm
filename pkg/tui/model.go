@@ -142,6 +142,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				AddError(fmt.Errorf("%s", m.errbuf.String())),
 			)
 		case tea.KeyEscape:
+		case tea.KeyBackspace:
+			if m.li.FilteringEnabled() {
+				m.li.ResetFilter()
+				return m, nil
+			}
 		case 'q':
 			if m.li.FilterState() != 1 {
 				return m, tea.Quit
