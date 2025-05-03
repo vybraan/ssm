@@ -11,7 +11,9 @@
 [license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
-SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.
+SSM is an SSH connection manager designed to help engineers organize servers, connect, filter, tag, and much more from a simple terminal interface.
+
+<!-- SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface. -->
 
 **tl;dr** - [try it now](#Quickstart)
 
@@ -19,16 +21,17 @@ SSM is an SSH connection manager that helps engineers organize servers, connect,
 
 ## Features
 - vim keys: jkhl, ctrl+d/u, g/G
-- emacs keys: ctrl+p/n/b/f(up/down/left/right)
+- emacs keys: ctrl+p/n/b/f
 - filter through all your servers
-- group servers using tags `#tag: admin`
-- show only tagged servers `ssm admin`
 - simple connect and return flow
 - switch between SSH and MOSH with a tab
-- quickly edit configs `<ctrl+e>`
-- auto-reload SSH config on change
 - `ctrl+v` shows all config params for selected host
-- short-flags support e.g. `ssm -se` enables `--exit` and `--show`
+- `<ctrl+e>` to edit the loaded config
+- config will automatically reload on change
+- CLI short-flags support e.g. `ssm -se` enables `--exit` and `--show`
+- group servers using tags e.g. `#tag: admin`
+- show only admin tagged servers `ssm admin`
+- use `#tagorder` key to prioritize tagged hosts in list-view
 
 See [CHANGELOG](changelog.md) for more info. \
 See [HELP](data/help) for CLI flags.
@@ -51,11 +54,16 @@ space␣         select multiple hosts to interact with
 
 ## Quickstart
 > If you're not accustomed to ssh config start here otherwise skip to [install](#install)
+- [SSH config manual](https://man.openbsd.org/ssh_config.5)
 ```bash
 # backup any existing config
 [ -f ~/.ssh/config ] && cp ~/.ssh/config ~/.ssh/config.bak
 # create ssh config
 cat <<EOF >>~/.ssh/config
+# This is an example config for SSH
+
+#tagorder is a key used to prioritize #tag: hosts in list-view
+
 Host hostname1
 #tag: tagValue1,tagValue2,tagValueN
     User user
@@ -84,10 +92,18 @@ Download `ssm` binary from [releases](https://github.com/lfaoro/ssm/releases)
 _need more? just ask_
 
 ```bash
-# bash one-liner
+Verify the binary is signed with my key
+gpg --verify ssm_sig ssm
+```
+
+```bash
+# bash script install for linux/macos
 curl -sSL https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
+
 wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
 ```
+
+<!-- See [install](install.md) for more systems. -->
 
 ## Build
 > requires [Go](https://go.dev/doc/install)
@@ -104,21 +120,19 @@ git clone https://github.com/lfaoro/ssm.git \
 ```
 
 ## Help
-- [SSH config manual](https://man.openbsd.org/ssh_config.5)
 - [SSH config example](data/config_example)
-- [create SSH config script](scripts/create_config.sh)
-- [message me on X](https://x.com/leonardofaoro)
 - [message me on Telegram](https://t.me/leonarth)
+- [tag me on X](https://x.com/leonardofaoro)
 
 ## Contributors
 [See all](https://github.com/lfaoro/ssm/graphs/contributors)
 
 Pull requests are very welcome and will be merged. \
-Feature requests are also welcome, we're happy to implement your ideas.
+Report a bug or request a new feature, feel free to open a [new issue](https://github.com/lfaoro/ssm/issues).
 
-### Support SSM
+## Support
 
-> If `ssm` is useful to you, kindly give us a star.
+> If `ssm` is useful to you, please consider giving it a ⭐.
 
 - **star the repo**
 - **tell your friends**
