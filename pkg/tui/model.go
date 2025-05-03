@@ -141,7 +141,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				conncmd,
 				AddError(fmt.Errorf("%s", m.errbuf.String())),
 			)
-		case tea.KeyEscape:
 		case tea.KeyBackspace:
 			if m.li.FilteringEnabled() {
 				m.li.ResetFilter()
@@ -231,7 +230,7 @@ func (m *Model) connect() tea.Cmd {
 		return AddError(fmt.Errorf("unable to find selected item: open bug report"))
 	}
 	if m.ExitOnCmd {
-		m.ExitHost = strings.TrimSpace(host.desc)
+		m.ExitHost = strings.TrimSpace(host.title)
 		return tea.Quit
 	}
 	sshPath, err := exec.LookPath(m.Cmd.String())

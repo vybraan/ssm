@@ -170,7 +170,7 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 				os.Exit(1)
 			}
 			fmt.Printf("ssm will exit and be replaced by %s\n", m.Cmd)
-			err = syscall.Exec(sshPath, []string{"ssh", m.ExitHost}, os.Environ())
+			err = syscall.Exec(sshPath, []string{"ssh", "-F", config.GetPath(), m.ExitHost}, os.Environ())
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
@@ -196,7 +196,7 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 		tag, err := latestTag()
 		if err != nil {
 			if cmd.Bool("debug") {
-				fmt.Println(err)
+				p.Send(tui.AppMsg{Text: fmt.Sprintf("%s", err)})
 			}
 			return
 		}
