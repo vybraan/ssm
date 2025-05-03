@@ -1,6 +1,6 @@
 module github.com/lfaoro/ssm
 
-go 1.24.1
+go 1.24
 
 require (
 	github.com/charmbracelet/bubbles/v2 v2.0.0-beta.1
