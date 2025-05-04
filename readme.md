@@ -53,7 +53,7 @@ space␣         select multiple hosts to interact with
 ```
 
 ## Quickstart
-> If you're not accustomed to ssh config start here otherwise skip to [install](#install)
+> If you're not accustomed to ssh config start here otherwise skip to [Install](#install)
 - [SSH config manual](https://man.openbsd.org/ssh_config.5)
 ```bash
 # backup any existing config
@@ -115,8 +115,13 @@ go install github.com/lfaoro/ssm@latest
 # build
 git clone https://github.com/lfaoro/ssm.git \
   && cd ssm \
-  && make build \
+  && make \
   && bin/ssm
+
+# clean
+make clean
+# clean everything even caches
+make distclean
 ```
 
 ## Help
