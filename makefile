@@ -1,13 +1,25 @@
-include data/tag.mk
-
 FLAGS=-trimpath -buildvcs=false -tags='netgo,osusergo,static_build'
-LDFLAGS=-ldflags='-s -w -extldflags "-static"'
+LDFLAGS=-ldflags='-w -s -extldflags -static -buildid='
 
-default: build
+default: build-static
 
-build:
+build-static:
 	@go mod tidy
 	CGO_ENABLED=0 go build ${FLAGS} ${LDFLAGS} -o ./bin/ .
+build-linked:
+	@go mod tidy
+	rm bin/ssm
+	go build -ldflags='-buildid= -w -s' -trimpath -buildvcs=false -o ./bin .
+
+clean:
+	rm -rf build/*
+	rm -rf bin/*
+	go clean -i -r
+distclean: clean
+	go clean -cache
+	go clean -modcache
+	go clean -testcache
+	go clean -fuzzcache
 
 release: pre release-prod help
 release-check:
@@ -30,14 +42,13 @@ stop:
 	@pkill -9 inotify ||:
 	@pkill -9 ssm ||:
 
+.PHONY: help
 help:
-	build/ssm_linux_amd64_v1/ssm --help >help.md
+	build/ssm_linux_amd64_v1/ssm --help >data/help
 
-clean:
-	rm -rf build/*
 
 backup: 
 	rm -rf build/*
 	tar -czvf ../ssm-$(shell date +%Y%m%d).tgz --exclude='.git' .
 
-.PHONY: build
+include data/tag.mk
