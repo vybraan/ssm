@@ -22,7 +22,8 @@ type Config struct {
 	Hosts          []Host // higher priority
 	secondaryHosts []Host // lower priority
 
-	path string
+	order Order
+	path  string
 }
 
 type Host struct {
@@ -30,28 +31,43 @@ type Host struct {
 	Options *som.SafeOrderedMap[string]
 }
 
+// Order defines how hosts are organized when parsed.
+type Order int
+
+const (
+	TagOrder Order = iota + 1
+)
+
+func New() *Config {
+	return &Config{}
+}
+
+func (c *Config) SetOrder(o Order) {
+	c.order = o
+}
+
 // Parse parses SSH config files from default known locations.
 // User: ~/.ssh/config
 // System: /etc/ssh/ssh_config
 // Parse also follows `Include` statements via recursion.
-func Parse() (*Config, error) {
+func (c *Config) Parse() error {
 	path, err := defaultConfigPath()
 	if err != nil {
-		return &Config{}, err
+		return err
 	}
-	return parse(path)
+	return c.parse(path)
 }
 
 // Parse parses SSH config file from custom location.
-func ParsePath(s string) (*Config, error) {
+func (c *Config) ParsePath(s string) error {
 	if !strings.HasPrefix(s, "/") {
 		wd, err := os.Getwd()
 		if err != nil {
-			return nil, err
+			return err
 		}
 		s = filepath.Join(wd, s)
 	}
-	return parse(s)
+	return c.parse(s)
 }
 
 func (c *Config) GetHost(name string) Host {
@@ -88,22 +104,35 @@ const (
 	tagOrderPrefix = "#tagorder"
 )
 
-func parse(path string) (*Config, error) {
+func (c *Config) parse(path string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	// clear hosts in case parse is
+	// called multiple times.
+	c.Hosts = []Host{}
+	c.secondaryHosts = []Host{}
+
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer f.Close()
-	config := &Config{Hosts: []Host{}, path: path}
+	c.path = path
 	scanner := bufio.NewScanner(f)
 	var tagOrder bool
 	var currentHost *Host
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		// set priority
+
+		// set orderbyTag
 		if line == tagOrderPrefix {
 			tagOrder = true
 		}
+		if c.order == TagOrder {
+			tagOrder = true
+		}
+
 		// ignore empty or comment line
 		if line == "" ||
 			strings.HasPrefix(line, commentPrefix) &&
@@ -130,15 +159,16 @@ func parse(path string) (*Config, error) {
 			}
 			paths, err := filepath.Glob(v)
 			if err != nil {
-				return nil, err
+				return err
 			}
 
 			for _, path := range paths {
-				cfg, err := parse(path) // recursion
+				cfg := New()
+				err := cfg.parse(path) // recursion
 				if err != nil {
-					return nil, err
+					return err
 				}
-				config.Hosts = append(config.Hosts, cfg.Hosts...)
+				c.Hosts = append(c.Hosts, cfg.Hosts...)
 			}
 		}
 		// all blocks must start with Host key
@@ -147,7 +177,7 @@ func parse(path string) (*Config, error) {
 				continue
 			}
 			if currentHost != nil {
-				newHost(tagOrder, currentHost, config)
+				newHost(tagOrder, currentHost, c)
 			}
 			currentHost = &Host{
 				Name:    v,
@@ -161,13 +191,13 @@ func parse(path string) (*Config, error) {
 		}
 	}
 	if currentHost != nil {
-		newHost(tagOrder, currentHost, config)
+		newHost(tagOrder, currentHost, c)
 	}
 	if err := scanner.Err(); err != nil {
-		return nil, err
+		return err
 	}
-	config.Hosts = append(config.Hosts, config.secondaryHosts...)
-	return config, nil
+	c.Hosts = append(c.Hosts, c.secondaryHosts...)
+	return nil
 }
 
 func newHost(tagOrder bool, currentHost *Host, config *Config) {
