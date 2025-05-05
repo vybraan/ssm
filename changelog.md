@@ -1,3 +1,16 @@
+# [0.3.4] next
+- add show comments for keys in view mode
+- add run command view
+
+# [0.3.3] May 5, 2025
+- add #tagorder key to show `#tag` hosts first
+- add `--order` flag to show `#tag` hosts first
+- add clear filter using `backspace`
+- fix could not resolve hostname bug
+- fix show Host when HostName is missing
+- refactor ssh config parser
+- add when EDITOR not set search for vim,vi,nano,ed
+
 # [0.3.2] April 30, 2025
 - fix error/log message alignment
 - add emacs keys: ctrl+p/n/b/f(up/down/left/right)
