@@ -41,11 +41,11 @@ func main() {
 		EnableShellCompletion:  true,
 		UseShortOptionHandling: true,
 		Suggest:                true,
-		Copyright:              "(c) Leonardo Faoro (MIT)",
+		Copyright:              "(c) Leonardo Faoro (BSD3)",
 		Usage:                  "Secure Shell Manager",
 		UsageText:              "ssm [--options] [tag]\nexample: ssm --show --exit vpn\nexample: ssm -se vpn",
 		ArgsUsage:              "[tag]",
-		Description:            "SSM is an open source (MIT) SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface.",
+		Description:            "SSM is an SSH connection manager designed to help engineers organize servers, connect, filter, tag, and much more from a simple terminal interface.",
 
 		Version: BuildVersion,
 		ExtraInfo: func() map[string]string {
@@ -82,6 +82,13 @@ func main() {
 				Aliases: []string{"e"},
 				Usage:   "exit after connection",
 				Value:   false,
+			},
+			&cli.BoolFlag{
+				Name:        "order",
+				Aliases:     []string{"o"},
+				Usage:       "show hosts with a tag first",
+				DefaultText: "tagged hosts will have priority (top of the list) over non-tag hosts",
+				Value:       false,
 			},
 			&cli.BoolFlag{
 				// TODO: not implemented
@@ -130,15 +137,18 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 	}
 
 	var err error
-	var config *sshconf.Config
+	var config = sshconf.New()
+	if cmd.Bool("order") {
+		config.SetOrder(sshconf.TagOrder)
+	}
 	configFlag := cmd.String("config")
 	if configFlag != "" {
-		config, err = sshconf.ParsePath(configFlag)
+		err = config.ParsePath(configFlag)
 		if err != nil {
 			return err
 		}
 	} else {
-		config, err = sshconf.Parse()
+		err = config.Parse()
 		if err != nil {
 			return err
 		}
