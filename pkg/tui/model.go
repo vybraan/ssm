@@ -168,7 +168,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case 'e':
 				confFile := m.config.GetPath()
 				editorPath := os.Getenv("EDITOR")
-				knownEditors := []string{
+				knownEditors := [...]string{
 					editorPath,
 					"vim",
 					"vi",
@@ -184,7 +184,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					break
 				}
 				if editorPath == "" {
-					return m, AddError(fmt.Errorf("env EDITOR not set, nor any %v found in PATH", knownEditors))
+					return m, AddError(fmt.Errorf("env EDITOR not set, nor any %v found in PATH", knownEditors[1:]))
 				}
 				cmd := exec.Command(editorPath, confFile)
 				cmd.Dir = filepath.Dir(confFile)
