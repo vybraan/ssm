@@ -167,11 +167,26 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			case 'e':
 				confFile := m.config.GetPath()
-				editorEnv := os.Getenv("EDITOR")
-				if editorEnv == "" {
-					return m, AddError(fmt.Errorf("env EDITOR not set; e.g. export EDITOR=vim"))
+				editorPath := os.Getenv("EDITOR")
+				knownEditors := []string{
+					editorPath,
+					"vim",
+					"vi",
+					"nano",
+					"ed",
 				}
-				cmd := exec.Command(editorEnv, confFile)
+				for _, cmd := range knownEditors {
+					path, err := exec.LookPath(cmd)
+					if err != nil {
+						continue
+					}
+					editorPath = path
+					break
+				}
+				if editorPath == "" {
+					return m, AddError(fmt.Errorf("env EDITOR not set, nor any %v found in PATH", knownEditors))
+				}
+				cmd := exec.Command(editorPath, confFile)
 				cmd.Dir = filepath.Dir(confFile)
 				cmd.Stderr = &m.errbuf
 				execCmd := tea.ExecProcess(cmd, func(err error) tea.Msg {
