@@ -109,11 +109,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.li.SetFilteringEnabled(true)
 		return m, AddLog("filter true")
 	case ReloadConfigMsg:
-		conf, err := sshconf.ParsePath(m.config.GetPath())
+		err := m.config.ParsePath(m.config.GetPath())
 		if err != nil {
 			return m, AddError(err)
 		}
-		m.li = listFrom(conf)
+		m.li = listFrom(m.config)
 		m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 		return m, AddLog("reloading config")
 	case ShowConfigMsg:
