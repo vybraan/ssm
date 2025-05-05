@@ -17,7 +17,10 @@ SSM is an SSH connection manager designed to help engineers organize servers, co
 
 **tl;dr** - [try it now](#Quickstart)
 
-![demo](data/demo.png)
+See [CHANGELOG](changelog.md) for more info. \
+See [HELP](data/help) for CLI flags.
+
+<!-- ![demo](data/demo.png) -->
 
 ## Features
 - vim keys: jkhl, ctrl+d/u, g/G
@@ -32,9 +35,6 @@ SSM is an SSH connection manager designed to help engineers organize servers, co
 - group servers using tags e.g. `#tag: admin`
 - show only admin tagged servers `ssm admin`
 - use `#tagorder` key to prioritize tagged hosts in list-view
-
-See [CHANGELOG](changelog.md) for more info. \
-See [HELP](data/help) for CLI flags.
 
 ## Keys
 ```
