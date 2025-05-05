@@ -92,15 +92,17 @@ Download `ssm` binary from [releases](https://github.com/lfaoro/ssm/releases)
 _need more? just ask_
 
 ```bash
-Verify the binary is signed with my key
+# verify the binary is signed with my key
 gpg --verify ssm_sig ssm
 ```
 
 ```bash
-# bash script install for linux/macos
+# bash script install for linux/macos/freebsd
 curl -sSL https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
-
 wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
+
+# brew tap for macos/linux
+brew install lfaoro/tap/ssm
 ```
 
 <!-- See [install](install.md) for more systems. -->
@@ -118,7 +120,6 @@ git clone https://github.com/lfaoro/ssm.git \
   && make \
   && bin/ssm
 
-# clean
 make clean
 # clean everything even caches
 make distclean
