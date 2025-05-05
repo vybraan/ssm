@@ -15,7 +15,7 @@ SSM is an SSH connection manager designed to help engineers organize servers, co
 
 <!-- SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface. -->
 
-**tl;dr** - [try it now](#Quickstart)
+**tl;dr** - [try it now](#Install)
 
 See [CHANGELOG](changelog.md) for more info. \
 See [HELP](data/help) for CLI flags.
