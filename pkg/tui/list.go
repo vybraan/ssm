@@ -2,7 +2,6 @@ package tui
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/charmbracelet/bubbles/v2/key"
 	"github.com/charmbracelet/bubbles/v2/list"
@@ -97,7 +96,7 @@ func formatHost(host sshconf.Host) item {
 			if _host != "" {
 				return _host
 			}
-			return ""
+			return host.Name
 		}
 		tags := func() string {
 			_tags, _ := host.Options.Get("#tag:")
@@ -108,10 +107,6 @@ func formatHost(host sshconf.Host) item {
 			return ""
 		}
 		out := fmt.Sprintf("%s%s%s %s", user(), hostname(), port(), tags())
-		out = strings.TrimSpace(out)
-		if out == "" {
-			return host.Name
-		}
 		return out
 	}()
 	newitem := item{
