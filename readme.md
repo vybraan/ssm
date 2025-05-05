@@ -97,7 +97,7 @@ gpg --verify ssm_sig ssm
 ```
 
 ```bash
-# bash script install for linux/macos/freebsd
+# bash script install for linux|macos|freebsd|netbsd|openbsd|solaris
 curl -sSL https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
 wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
 
@@ -105,7 +105,7 @@ wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/g
 brew install lfaoro/tap/ssm
 ```
 
-<!-- See [install](install.md) for more systems. -->
+<!-- See [install](install.md) for more... -->
 
 ## Build
 > requires [Go](https://go.dev/doc/install)

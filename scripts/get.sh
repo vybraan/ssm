@@ -86,7 +86,7 @@ case "${ARCH}" in
     *) error "Unsupported architecture: ${ARCH}" ;;
 esac
 case "${OS}" in
-    linux)
+    linux|freebsd|netbsd|openbsd|solaris)
         ARCHIVE_NAME="${APP_NAME}_${VERSION}_linux_${ARCH}.tgz"
         if is_writable "/usr/local/bin"; then
             INSTALL_DIR="/usr/local/bin"
@@ -96,14 +96,6 @@ case "${OS}" in
         ;;
     darwin)
         ARCHIVE_NAME="${APP_NAME}_darwin_${ARCH}.tgz"
-        if is_writable "/usr/local/bin"; then
-            INSTALL_DIR="/usr/local/bin"
-        else
-            INSTALL_DIR="$HOME/.local/bin"
-        fi
-        ;;
-    freebsd)
-        ARCHIVE_NAME="${APP_NAME}_freebsd_${ARCH}.tgz"
         if is_writable "/usr/local/bin"; then
             INSTALL_DIR="/usr/local/bin"
         else
