@@ -26,7 +26,7 @@ SSM is an SSH connection manager designed to help engineers organize servers, co
 - simple connect and return flow
 - switch between SSH and MOSH with a tab
 - `ctrl+v` shows all config params for selected host
-- `<ctrl+e>` to edit the loaded config
+- `ctrl+e` to edit the loaded config
 - config will automatically reload on change
 - CLI short-flags support e.g. `ssm -se` enables `--exit` and `--show`
 - group servers using tags e.g. `#tag: admin`
