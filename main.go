@@ -169,7 +169,6 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 				fmt.Printf("can't find `%s` cmd in your path: %v\n", m.Cmd, err)
 				os.Exit(1)
 			}
-			fmt.Printf("ssm will exit and be replaced by %s\n", m.Cmd)
 			err = syscall.Exec(sshPath, []string{"ssh", "-F", config.GetPath(), m.ExitHost}, os.Environ())
 			if err != nil {
 				fmt.Println(err)
@@ -217,6 +216,7 @@ var testCmd = &cli.Command{
 var testAction = func(_ context.Context, cmd *cli.Command) error {
 	return nil
 }
+
 var generateCmd = &cli.Command{
 	Name:    "generate",
 	Aliases: []string{"gen"},
