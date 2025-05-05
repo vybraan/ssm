@@ -87,7 +87,7 @@ case "${ARCH}" in
 esac
 case "${OS}" in
     linux|freebsd|netbsd|openbsd|solaris)
-        ARCHIVE_NAME="${APP_NAME}_${VERSION}_linux_${ARCH}.tgz"
+        ARCHIVE_NAME="${APP_NAME}_${VERSION}_${OS}_${ARCH}.tar.gz"
         if is_writable "/usr/local/bin"; then
             INSTALL_DIR="/usr/local/bin"
         else
@@ -95,7 +95,7 @@ case "${OS}" in
         fi
         ;;
     darwin)
-        ARCHIVE_NAME="${APP_NAME}_darwin_${ARCH}.tgz"
+        ARCHIVE_NAME="${APP_NAME}_darwin_all.tar.gz"
         if is_writable "/usr/local/bin"; then
             INSTALL_DIR="/usr/local/bin"
         else
