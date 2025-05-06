@@ -98,8 +98,8 @@ gpg --verify ssm_sig ssm
 
 ```bash
 # bash script install for linux|macos|freebsd|netbsd|openbsd|solaris
-curl -sSL https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
-wget -qO- https://raw.githubusercontent.com/lfaoro/ssm/refs/heads/main/scripts/get.sh | bash
+curl -sSL https://github.com/lfaoro/ssm/raw/main/scripts/get.sh | bash
+wget -qO- https://github.com/lfaoro/ssm/raw/main/scripts/get.sh | bash
 
 # brew tap for macos/linux
 brew install lfaoro/tap/ssm
