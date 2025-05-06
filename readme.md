@@ -1,24 +1,25 @@
 # Secure Shell Manager
 
-> Streamline SSH with a simple Terminal UI
+> Streamline SSH connections with a simple Terminal UI
 
 [![version][version-badge]](changelog.md)
 [![license][license-badge]](license)
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
-[![follow on x][x-badge]](https://twitter.com/intent/follow?screen_name=leonardofaoro)
+[![follow on x][x-badge]](https://x.com/intent/follow?screen_name=leonardofaoro)
 
 [version-badge]: https://img.shields.io/badge/version-0.3.3-blue.svg
 [license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
-SSM is an SSH connection manager designed to help engineers organize servers, connect, filter, tag, and much more from a simple terminal interface.
+## About
+`ssm` is a connection manager designed to help you organize servers, connect, filter, tag, and much more from a simple terminal interface. It works on top of your installed command-line programs and does not require any setup on your remote systems, therefore if you're using CLI tools like `ssh`, `sshpass`, `mosh`, `rsync`, etc. to connect to your systems–you can streamline them all with `ssm`.
 
 <!-- SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface. -->
 
-**tl;dr** - [try it now](#Install)
+**tl;dr** - [try now](#Install)
 
-See [CHANGELOG](changelog.md) for more info. \
-See [HELP](data/help) for CLI flags.
+See [HELP](data/help) for CLI flags. \
+See [CHANGELOG](changelog.md) for dev info.
 
 <!-- ![demo](data/demo.png) -->
 
@@ -27,8 +28,8 @@ See [HELP](data/help) for CLI flags.
 - emacs keys: ctrl+p/n/b/f
 - filter through all your servers
 - switch between SSH and MOSH with a tab
-- `ctrl+v` shows all config params for selected host
-- `ctrl+e` to edit the loaded config
+- `ctrl+e` edit the loaded config
+- `ctrl+v` shows all config params
 - config will automatically reload on change
 - CLI short-flags support e.g. `ssm -seo` enables `--exit`, `--show`, and `--order`
 - group servers using tags e.g. `#tag: admin`
@@ -38,8 +39,8 @@ See [HELP](data/help) for CLI flags.
 ## Keys
 ```
 <enter↵>       connect to selected host
-<ctrl+v>       show config for selected host
-<ctrl+e>       edit ssh configs
+<ctrl+e>       edit ssh config
+<ctrl+v>       show all config params
 <tab>          switch between SSH/MOSH
 < / >          filter hosts
 <q or esc>     quit
@@ -141,7 +142,7 @@ make distclean
 Pull requests are very welcome and will be merged. \
 Report a bug or request a new feature, feel free to open a [new issue](https://github.com/lfaoro/ssm/issues).
 
-## Support
+## Show support
 
 > If `ssm` is useful to you, please consider giving it a ⭐.
 
