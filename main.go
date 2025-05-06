@@ -35,13 +35,13 @@ func main() {
 		Authors: []any{
 			&mail.Address{
 				Name:    "Leonardo Faoro",
-				Address: "ssm@leonardofaoro.com",
+				Address: "me@leonardofaoro.com",
 			},
 		},
 		EnableShellCompletion:  true,
 		UseShortOptionHandling: true,
 		Suggest:                true,
-		Copyright:              "(c) Leonardo Faoro (BSD3)",
+		Copyright:              "(c) Leonardo Faoro & authors",
 		Usage:                  "Secure Shell Manager",
 		UsageText:              "ssm [--options] [tag]\nexample: ssm --show --exit vpn\nexample: ssm -se vpn",
 		ArgsUsage:              "[tag]",
@@ -101,7 +101,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "config",
 				Aliases: []string{"c"},
-				Usage:   "custom config file path",
+				Usage:   "custom ssh config file path",
 			},
 			&cli.BoolFlag{
 				Name:    "debug",
