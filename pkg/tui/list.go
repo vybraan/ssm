@@ -9,7 +9,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea/v2"
 	lg "github.com/charmbracelet/lipgloss/v2"
 	"github.com/lfaoro/ssm/pkg/sshconf"
-	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
 
 type item struct {
@@ -60,14 +59,16 @@ func listFrom(config *sshconf.Config) list.Model {
 		Padding(0, 1)
 	li.SetStatusBarItemName("host", "hosts")
 	li.Title = fmt.Sprintf("SSH servers (%v)", config.GetPath())
+
 	// add segfault.net (free root server provider)
-	segfaultHost := sshconf.Host{
-		Name:    "create free research root server",
-		Options: safeorderedmap.New[string](),
-	}
-	segfaultHost.Options.Add("hostname", "segfault.net")
-	segfaultHost.Options.Add("user", "root")
-	config.Hosts = append(config.Hosts, segfaultHost)
+	// segfaultHost := sshconf.Host{
+	// 	Name:    "create free research root server",
+	// 	Options: safeorderedmap.New[string](),
+	// }
+	// segfaultHost.Options.Add("hostname", "segfault.net")
+	// segfaultHost.Options.Add("user", "root")
+	// config.Hosts = append(config.Hosts, segfaultHost)
+
 	for _, host := range config.Hosts {
 		newitem := formatHost(host)
 		li.InsertItem(len(config.Hosts), newitem)
