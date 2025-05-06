@@ -1,10 +1,9 @@
-# This is the official list of ssm
+# This is the official list of Secure Shell Manager
 # authors for copyright purposes.
 #
 # Names should be added to this file as one of
-#     Organization's name
-#     Individual's name <submission email address>
-#     Individual's name <submission email address> <email2> <emailN>
+#     Organization name (when applicable)
+#     Individual name <submission email address>
 #
 # Please keep the list sorted.
 #
@@ -13,5 +12,6 @@
 # a copyright holder, though, then please send a PR referencing your
 # earlier contributions and clarifying whether it's you or your
 # company that owns the rights to your contribution.
+
 Leonardo Faoro <me@leonardofaoro.com>
 George Cindea <george.cindea@gmail.com>
