@@ -155,6 +155,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// we're only interested in ctrl+<key>
 		case tea.ModCtrl:
 			switch msg.Code {
+			case 'c':
+				return m, tea.Quit
 			// emacs keybinds
 			case 'p':
 				m.li.CursorUp()
