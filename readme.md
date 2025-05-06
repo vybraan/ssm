@@ -26,12 +26,11 @@ See [HELP](data/help) for CLI flags.
 - vim keys: jkhl, ctrl+d/u, g/G
 - emacs keys: ctrl+p/n/b/f
 - filter through all your servers
-- simple connect and return flow
 - switch between SSH and MOSH with a tab
 - `ctrl+v` shows all config params for selected host
 - `ctrl+e` to edit the loaded config
 - config will automatically reload on change
-- CLI short-flags support e.g. `ssm -se` enables `--exit` and `--show`
+- CLI short-flags support e.g. `ssm -seo` enables `--exit`, `--show`, and `--order`
 - group servers using tags e.g. `#tag: admin`
 - show only admin tagged servers `ssm admin`
 - use `#tagorder` key to prioritize tagged hosts in list-view
@@ -116,6 +115,12 @@ go install github.com/lfaoro/ssm@latest
 
 # build
 git clone https://github.com/lfaoro/ssm.git \
+  && cd ssm \
+  && make \
+  && bin/ssm
+
+# build from sr.ht mirror
+git clone https://git.sr.ht/~faoro/ssm \
   && cd ssm \
   && make \
   && bin/ssm
