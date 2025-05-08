@@ -161,6 +161,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case tea.ModCtrl:
 			switch msg.Code {
 			case 'c':
+				if m.li.FilterState() == list.Filtering ||
+					m.li.IsFiltered() {
+					m.li.ResetFilter()
+					return m, nil
+				}
 				return m, tea.Quit
 			// emacs keybinds
 			case 'p':

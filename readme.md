@@ -12,7 +12,7 @@
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
 ## About
-`ssm` is a connection manager designed to help you organize servers, connect, filter, tag, and much more from a simple terminal interface. It works on top of your installed command-line programs and does not require any setup on your remote systems, therefore if you're using CLI tools like `ssh`, `sshpass`, `mosh`, `rsync`, etc. to connect to your systems–you can streamline them all with `ssm`.
+`ssm` is a connection manager designed to help you organize servers, connect, filter, tag, and much more from a simple terminal interface. It works on top of your installed command-line programs and does not require any setup on your remote systems.
 
 <!-- SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface. -->
 
@@ -31,7 +31,7 @@ See [CHANGELOG](changelog.md) for dev info.
 - `ctrl+e` edit the loaded config
 - `ctrl+v` shows all config params
 - config will automatically reload on change
-- CLI short-flags support e.g. `ssm -seo` enables `--exit`, `--show`, and `--order`
+- CLI short-flags support e.g. `ssm -seo` enables `--show`, `--exit`, and `--order`
 - group servers using tags e.g. `#tag: admin`
 - show only admin tagged servers `ssm admin`
 - use `#tagorder` key to prioritize tagged hosts in list-view
@@ -71,15 +71,15 @@ Host hostname1
     Port 2222
     IdentityFile ~/.ssh/id_rsa
 
-Host terminalcoffee
-#tag: shops
-    User adam
-    HostName terminal.shop
-
 Host segfault.net
 #tag: research
     User root
     HostName segfault.net
+
+Host terminalcoffee
+#tag: shops
+    User adam
+    HostName terminal.shop
 EOF
 # file must have 600 perms for security
 chmod 600 ~/.ssh/config
@@ -100,6 +100,9 @@ gpg --verify ssm_sig ssm
 # bash script install for linux|macos|freebsd|netbsd|openbsd|solaris
 curl -sSL https://github.com/lfaoro/ssm/raw/main/scripts/get.sh | bash
 wget -qO- https://github.com/lfaoro/ssm/raw/main/scripts/get.sh | bash
+
+# we don't pay Apple for a signing key, therefore you might need to run
+xattr -d com.apple.quarantine ssm # on MacOS
 
 # brew tap for macos/linux
 brew install lfaoro/tap/ssm

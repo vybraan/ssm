@@ -2,7 +2,7 @@
 - add show comments for keys in view mode
 - add run command view
 
-# [0.3.4] next
+# [0.3.4] May 9, 2025
 - resize list dynamically when error
 - add ctrl+c to quit the app
 - remove segfault auto add
