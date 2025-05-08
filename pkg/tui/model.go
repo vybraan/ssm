@@ -78,12 +78,17 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.BackgroundColorMsg:
 		m.isDark = msg.IsDark()
 	case tea.WindowSizeMsg:
-		m.li.SetSize(msg.Width, msg.Height-3)
+		var errSize = 1
+		if m.log.err != nil {
+			errSize = 3
+		}
+		m.li.SetSize(msg.Width, msg.Height-errSize)
 		if m.debug {
 			m.li.SetSize(msg.Width, msg.Height-9)
 		}
 		m.vp.SetHeight(m.li.Height())
 		m.vp.SetWidth(msg.Width / 2)
+		return m, tea.RequestWindowSize
 	case tickMsg:
 		return m, tea.Batch(tick(),
 			AddLog("ticking..."))
