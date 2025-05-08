@@ -1,6 +1,11 @@
-# [0.3.4] next
+# [0.3.5] next
 - add show comments for keys in view mode
 - add run command view
+
+# [0.3.4] next
+- resize list dynamically when error
+- add ctrl+c to quit the app
+- remove segfault auto add
 
 # [0.3.3] May 5, 2025
 - add #tagorder key to show `#tag` hosts first
@@ -79,3 +84,4 @@
 [0.3.1]: https://github.com/lfaoro/ssm/compare/0.3.0...0.3.1
 [0.3.2]: https://github.com/lfaoro/ssm/compare/0.3.1...0.3.2
 [0.3.3]: https://github.com/lfaoro/ssm/compare/0.3.2...0.3.3
+[0.3.4]: https://github.com/lfaoro/ssm/compare/0.3.3...0.3.4
