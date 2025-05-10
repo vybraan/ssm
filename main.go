@@ -76,12 +76,14 @@ func main() {
 				Aliases: []string{"s"},
 				Usage:   "always show config params",
 				Value:   false,
+				Sources: cli.EnvVars("SSM_SHOW"),
 			},
 			&cli.BoolFlag{
 				Name:    "exit",
 				Aliases: []string{"e"},
 				Usage:   "exit after connection",
 				Value:   false,
+				Sources: cli.EnvVars("SSM_EXIT"),
 			},
 			&cli.BoolFlag{
 				Name:        "order",
@@ -89,6 +91,7 @@ func main() {
 				Usage:       "show hosts with a tag first",
 				DefaultText: "tagged hosts will have priority (top of the list) over non-tag hosts",
 				Value:       false,
+				Sources:     cli.EnvVars("SSM_ORDER"),
 			},
 			&cli.BoolFlag{
 				// TODO: not implemented
@@ -99,15 +102,18 @@ func main() {
 				Hidden:  true,
 			},
 			&cli.StringFlag{
-				Name:    "config",
-				Aliases: []string{"c"},
-				Usage:   "custom ssh config file path",
+				Name:      "config",
+				TakesFile: true,
+				Aliases:   []string{"c"},
+				Usage:     "custom ssh config file path",
+				Sources:   cli.EnvVars("SSM_SSH_CONFIG_PATH"),
 			},
 			&cli.BoolFlag{
 				Name:    "debug",
 				Aliases: []string{"d"},
 				Usage:   "enable debug mode with verbose logging",
 				Value:   false,
+				Sources: cli.EnvVars("SSM_DEBUG"),
 			},
 		},
 
