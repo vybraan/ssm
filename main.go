@@ -45,7 +45,7 @@ func main() {
 		Usage:                  "Secure Shell Manager",
 		UsageText:              "ssm [--options] [tag]\nexample: ssm --show --exit vpn\nexample: ssm -se vpn",
 		ArgsUsage:              "[tag]",
-		Description:            "SSM is an SSH connection manager designed to help engineers organize servers, connect, filter, tag, and much more from a simple terminal interface.",
+		Description:            "ssm is a connection manager designed to help organize servers, connect, filter, tag, and much more from a simple terminal interface. It works on top of installed command-line programs and does not require any setup on remote systems.",
 
 		Version: BuildVersion,
 		ExtraInfo: func() map[string]string {
@@ -86,12 +86,11 @@ func main() {
 				Sources: cli.EnvVars("SSM_EXIT"),
 			},
 			&cli.BoolFlag{
-				Name:        "order",
-				Aliases:     []string{"o"},
-				Usage:       "show hosts with a tag first",
-				DefaultText: "tagged hosts will have priority (top of the list) over non-tag hosts",
-				Value:       false,
-				Sources:     cli.EnvVars("SSM_ORDER"),
+				Name:    "order",
+				Aliases: []string{"o"},
+				Usage:   "show hosts with a tag first",
+				Value:   false,
+				Sources: cli.EnvVars("SSM_ORDER"),
 			},
 			&cli.BoolFlag{
 				// TODO: not implemented

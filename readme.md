@@ -12,7 +12,7 @@
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
 ## About
-`ssm` is a connection manager designed to help you organize servers, connect, filter, tag, and much more from a simple terminal interface. It works on top of your installed command-line programs and does not require any setup on your remote systems.
+`ssm` is a connection manager designed to help organize servers, connect, filter, tag, and much more from a simple terminal interface. It works on top of installed command-line programs and does not require any setup on remote systems.
 
 <!-- SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface. -->
 
