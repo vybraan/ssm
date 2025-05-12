@@ -7,22 +7,22 @@ USAGE:
    example: ssm -se vpn
 
 VERSION:
-   0.3.3
+   0.3.4
 
 DESCRIPTION:
    SSM is an SSH connection manager designed to help engineers organize servers, connect, filter, tag, and much more from a simple terminal interface.
 
 AUTHOR:
-   "Leonardo Faoro" <ssm@leonardofaoro.com>
+   "Leonardo Faoro" <me@leonardofaoro.com>
 
 GLOBAL OPTIONS:
    --show, -s                  always show config params (default: false)
    --exit, -e                  exit after connection (default: false)
    --order, -o                 show hosts with a tag first (default: tagged hosts will have priority (top of the list) over non-tag hosts)
-   --config string, -c string  custom config file path
+   --config string, -c string  custom ssh config file path
    --debug, -d                 enable debug mode with verbose logging (default: false)
    --help, -h                  show help
    --version, -v               print the version
 
 COPYRIGHT:
-   (c) Leonardo Faoro (BSD3)
+   (c) Leonardo Faoro & authors
