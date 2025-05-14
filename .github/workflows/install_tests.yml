@@ -1,0 +1,27 @@
+name: Install tests
+on: [push, pull_request]
+
+jobs:
+  install_on_linux_x86:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Run install script
+      run: ./scripts/get.sh
+      shell: bash
+  install_on_linux_arm:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Run install script
+      run: ./scripts/get.sh
+      shell: bash
+  install_on_macos_arm:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Run install script
+      run:  brew install lfaoro/tap/ssm
