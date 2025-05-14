@@ -86,9 +86,15 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.debug {
 			m.li.SetSize(msg.Width, msg.Height-9)
 		}
+
 		m.vp.SetHeight(m.li.Height())
 		m.vp.SetWidth(msg.Width / 2)
-		return m, tea.RequestWindowSize
+
+		m.ta.SetWidth(msg.Width)
+		m.ta.SetHeight(msg.Height / 2)
+		if m.log.err != nil {
+			cmds = append(cmds, tea.RequestWindowSize)
+		}
 	case tickMsg:
 		return m, tea.Batch(tick(),
 			AddLog("ticking..."))
@@ -167,6 +173,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, nil
 				}
 				return m, tea.Quit
+
 			// emacs keybinds
 			case 'p':
 				m.li.CursorUp()
