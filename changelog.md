@@ -1,6 +1,11 @@
-# [0.3.5] next
+# [0.3.6] next
 - add show comments for keys in view mode
 - add run command view
+- add themes `--theme matrix` editable from themes.go
+
+# [0.3.5] May 14, 2025
+- add use ENV variables to configure FLAGS
+- fix bug causing high cpu usage
 
 # [0.3.4] May 9, 2025
 - resize list dynamically when error
@@ -85,3 +90,4 @@
 [0.3.2]: https://github.com/lfaoro/ssm/compare/0.3.1...0.3.2
 [0.3.3]: https://github.com/lfaoro/ssm/compare/0.3.2...0.3.3
 [0.3.4]: https://github.com/lfaoro/ssm/compare/0.3.3...0.3.4
+[0.3.4]: https://github.com/lfaoro/ssm/compare/0.3.4...0.3.5

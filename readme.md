@@ -7,11 +7,11 @@
 [![go report card](https://goreportcard.com/badge/github.com/lfaoro/ssm)](https://goreportcard.com/report/github.com/lfaoro/ssm)
 [![follow on x][x-badge]](https://x.com/intent/follow?screen_name=leonardofaoro)
 
-[version-badge]: https://img.shields.io/badge/version-0.3.4-blue.svg
+[version-badge]: https://img.shields.io/badge/version-0.3.5-blue.svg
 [license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
-`ssm` is an SSH connection manager designed to organize servers, connect, filter, tag, and much more from a simple terminal interface. Works on top of installed command-line programs and does not require any setup on remote systems.
+`ssm` is an SSH connection manager designed to connect, filter, tag, and much more from a simple terminal interface. Works on top of installed command-line programs and does not require any setup on remote systems.
 
 <!-- SSM is an SSH connection manager that helps engineers organize servers, connect, filter, tag, execute commands (soon), transfer files (soon), and much more from a simple terminal interface. -->
 
