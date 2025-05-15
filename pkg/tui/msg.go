@@ -5,8 +5,11 @@ type (
 	ReloadConfigMsg  struct{}
 	LivenessCheckMsg struct{}
 	ExitOnConnMsg    struct{}
-	tickMsg          struct{}
-	AppMsg           struct {
+	SetThemeMsg      struct {
+		Theme string
+	}
+	tickMsg struct{}
+	AppMsg  struct {
 		Text string
 	}
 	FilterTagMsg struct {

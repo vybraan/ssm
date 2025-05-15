@@ -23,6 +23,7 @@ import (
 type Model struct {
 	config     *sshconf.Config
 	showConfig bool
+	theme      theme
 
 	li list.Model
 	vp viewport.Model
@@ -42,7 +43,7 @@ func NewModel(config *sshconf.Config, debug bool) *Model {
 	m := &Model{}
 	m.debug = debug
 	m.config = config
-	m.li = listFrom(config)
+	m.li = listFrom(m.config, m.theme)
 	m.log = NewLog(WithDebug(debug))
 	m.Cmd = ssh // defaults to ssh
 	m.vp = viewport.New()
@@ -58,7 +59,7 @@ func (m *Model) Init() tea.Cmd {
 		tea.EnterAltScreen,
 		tea.EnableBracketedPaste,
 		tea.EnableReportFocus,
-		// tea.SetBackgroundColor(color.Black),
+		tea.SetBackgroundColor(color.Black),
 		// tea.EnableMouseAllMotion,
 		// tea.EnableMouseCellMotion,
 	}
@@ -110,7 +111,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			_ = host
 			h.Options.Add("alive", "yes")
 		}
-		m.li = listFrom(m.config)
+		m.li = listFrom(m.config, m.theme)
 		return m, nil
 	case ExitOnConnMsg:
 		m.ExitOnCmd = true
@@ -124,12 +125,17 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if err != nil {
 			return m, AddError(err)
 		}
-		m.li = listFrom(m.config)
+		m.li = listFrom(m.config, m.theme)
 		m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 		return m, AddLog("reloading config")
 	case ShowConfigMsg:
 		m.showConfig = true
 		return m, nil
+	case SetThemeMsg:
+		m.theme = themes[msg.Theme]
+		m.li = listFrom(m.config, m.theme)
+		return m, nil
+
 	case tea.KeyPressMsg:
 		switch msg.Code {
 		case tea.KeyTab:

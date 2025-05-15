@@ -92,20 +92,29 @@ func main() {
 				Value:   false,
 				Sources: cli.EnvVars("SSM_ORDER"),
 			},
-			&cli.BoolFlag{
-				// TODO: not implemented
-				Name:    "ping",
-				Aliases: []string{"p"},
-				Usage:   "ping hosts and show liveness",
-				Value:   false,
-				Hidden:  true,
-			},
 			&cli.StringFlag{
 				Name:      "config",
 				TakesFile: true,
 				Aliases:   []string{"c"},
 				Usage:     "custom ssh config file path",
 				Sources:   cli.EnvVars("SSM_SSH_CONFIG_PATH"),
+			},
+			&cli.StringFlag{
+				Name:        "theme",
+				TakesFile:   false,
+				Aliases:     []string{"t"},
+				Usage:       "define a color theme",
+				DefaultText: "sky|matrix",
+				Value:       "matrix",
+				Sources:     cli.EnvVars("SSM_THEME"),
+			},
+			&cli.BoolFlag{
+				// TODO: not implemented
+				Name:    "ping",
+				Aliases: []string{"p"},
+				Usage:   "ping all hosts and show liveness",
+				Value:   false,
+				Hidden:  true,
 			},
 			&cli.BoolFlag{
 				Name:    "debug",
@@ -191,6 +200,7 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 			}
 		}
 	}()
+
 	if filterTag != "" {
 		p.Send(tui.FilterTagMsg{
 			Arg: fmt.Sprintf("#%s", filterTag),
@@ -202,9 +212,16 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 	if cmd.Bool("show") {
 		p.Send(tui.ShowConfigMsg{})
 	}
+	theme := cmd.String("theme")
+	if theme != "" {
+		p.Send(tui.SetThemeMsg{
+			Theme: theme,
+		})
+	}
 	if cmd.Bool("ping") {
 		p.Send(tui.LivenessCheckMsg{})
 	}
+
 	// inform user when new version is available
 	go func() {
 		tag, err := latestTag()

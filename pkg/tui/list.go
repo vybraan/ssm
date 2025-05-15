@@ -19,19 +19,27 @@ func (i item) Title() string       { return i.title }
 func (i item) Description() string { return i.desc }
 func (i item) FilterValue() string { return i.title + i.desc }
 
-func listFrom(config *sshconf.Config) list.Model {
+func listFrom(config *sshconf.Config, theme theme) list.Model {
 	var li list.Model
+	var c = theme
 	lightDark := lg.LightDark(true)
 	d := list.NewDefaultDelegate()
 	d.ShowDescription = true
 	d.SetSpacing(0)
 	d.Styles.SelectedTitle = lg.NewStyle().
 		Border(lg.NormalBorder(), false, false, false, true).
-		BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
-		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
+		BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selBorderColor))).
+		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selTitleColor))).
 		Padding(0, 0, 0, 1)
 	d.Styles.SelectedDesc = d.Styles.SelectedTitle.
-		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#4682b4")))
+		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selDescColor)))
+	// d.Styles.SelectedTitle = lg.NewStyle().
+	// 	Border(lg.NormalBorder(), false, false, false, true).
+	// 	BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
+	// 	Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
+	// 	Padding(0, 0, 0, 1)
+	// d.Styles.SelectedDesc = d.Styles.SelectedTitle.
+	// 	Foreground(lightDark(lg.Color("#F79F3F"), lg.Color("#4682b4")))
 
 	li = list.New(
 		[]list.Item{},
@@ -54,7 +62,7 @@ func listFrom(config *sshconf.Config) list.Model {
 		Foreground(lightDark(lg.Color("#A49FA5"), lg.Color("#777777"))).
 		Padding(0, 0, 1, 2) //nolint:mnd
 	li.Styles.Title = lg.NewStyle().
-		Background(lg.Color("#4682b4")).
+		Background(lg.Color(c.titleColor)).
 		Foreground(lg.Color("230")).
 		Padding(0, 1)
 	li.SetStatusBarItemName("host", "hosts")
