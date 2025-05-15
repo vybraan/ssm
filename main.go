@@ -214,11 +214,12 @@ func mainCmd(_ context.Context, cmd *cli.Command) error {
 			}
 			return
 		}
-		if tag != cmd.Version {
+		if tag != cmd.Version && cmd.Version != "0.0.0-dev" {
 			msg := fmt.Sprintf("%s: new version %s is available", cmd.Version, tag)
 			p.Send(tui.AppMsg{Text: msg})
 		}
 	}()
+
 	wg.Wait()
 	return nil
 }
