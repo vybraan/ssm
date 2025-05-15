@@ -7,6 +7,7 @@ package tui
 import (
 	"bytes"
 	"fmt"
+	"image/color"
 	"os"
 	"os/exec"
 	"path/filepath"
