@@ -28,11 +28,11 @@ func listFrom(config *sshconf.Config, theme theme) list.Model {
 	d.SetSpacing(0)
 	d.Styles.SelectedTitle = lg.NewStyle().
 		Border(lg.NormalBorder(), false, false, false, true).
-		BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selBorderColor))).
-		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selTitleColor))).
+		BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selectedBorderColor))).
+		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selectedTitleColor))).
 		Padding(0, 0, 0, 1)
 	d.Styles.SelectedDesc = d.Styles.SelectedTitle.
-		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selDescColor)))
+		Foreground(lightDark(lg.Color("#F79F3F"), lg.Color(c.selectedDescriptionColor)))
 	// d.Styles.SelectedTitle = lg.NewStyle().
 	// 	Border(lg.NormalBorder(), false, false, false, true).
 	// 	BorderForeground(lightDark(lg.Color("#F79F3F"), lg.Color("#00bfff"))).
@@ -62,7 +62,7 @@ func listFrom(config *sshconf.Config, theme theme) list.Model {
 		Foreground(lightDark(lg.Color("#A49FA5"), lg.Color("#777777"))).
 		Padding(0, 0, 1, 2) //nolint:mnd
 	li.Styles.Title = lg.NewStyle().
-		Background(lg.Color(c.titleColor)).
+		Background(lg.Color(c.mainTitleColor)).
 		Foreground(lg.Color("230")).
 		Padding(0, 1)
 	li.SetStatusBarItemName("host", "hosts")

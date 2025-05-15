@@ -1,10 +1,13 @@
 package tui
 
+// theme provides the colors for the properties.
+// you can use ANSI, ANSI256 or Hex colors.
+// https://html-color.code
 type theme struct {
-	titleColor     string
-	selTitleColor  string
-	selBorderColor string
-	selDescColor   string
+	mainTitleColor           string
+	selectedBorderColor      string
+	selectedTitleColor       string
+	selectedDescriptionColor string
 }
 
 var themes = map[string]theme{
@@ -14,18 +17,18 @@ var themes = map[string]theme{
 
 func matrixTheme() theme {
 	return theme{
-		titleColor:     "#648c11",
-		selTitleColor:  "#9efd38",
-		selBorderColor: "#9efd38",
-		selDescColor:   "#648c11",
+		mainTitleColor:           "#648c11",
+		selectedTitleColor:       "#9efd38",
+		selectedBorderColor:      "#9efd38",
+		selectedDescriptionColor: "#648c11",
 	}
 }
 
 func skyTheme() theme {
 	return theme{
-		titleColor:     "#4682b4",
-		selTitleColor:  "#00bfff",
-		selBorderColor: "#00bfff",
-		selDescColor:   "#4682b4",
+		mainTitleColor:           "#4682b4",
+		selectedTitleColor:       "#00bfff",
+		selectedBorderColor:      "#00bfff",
+		selectedDescriptionColor: "#4682b4",
 	}
 }
