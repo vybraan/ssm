@@ -34,6 +34,8 @@ See [CHANGELOG](changelog.md) for dev info.
 - group servers using tags e.g. `#tag: admin`
 - show only admin tagged servers `ssm admin`
 - use `#tagorder` key to prioritize tagged hosts in list-view
+- use `--theme` to change color scheme
+- edit [themes.go](pkg/tui/themes.go) to add more themes
 
 ## Keys
 ```
