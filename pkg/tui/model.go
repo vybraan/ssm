@@ -92,8 +92,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.vp.SetHeight(m.li.Height())
 		m.vp.SetWidth(msg.Width / 2)
 
-		m.ta.SetWidth(msg.Width)
-		m.ta.SetHeight(msg.Height / 2)
+		// m.ta.SetWidth(msg.Width)
+		// m.ta.SetHeight(msg.Height / 2)
 		if m.log.err != nil {
 			cmds = append(cmds, tea.RequestWindowSize)
 		}
