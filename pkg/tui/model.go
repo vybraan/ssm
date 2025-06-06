@@ -46,7 +46,7 @@ func NewModel(config *sshconf.Config, debug bool) *Model {
 	m.config = config
 	m.li = listFrom(m.config, m.theme)
 	m.log = NewLog(WithDebug(debug))
-	m.Cmd = ssh // defaults to ssh
+	m.Cmd = sshCmd // defaults to ssh
 	m.vp = viewport.New()
 	m.vp.SetWidth(40)
 	m.vp.SetHeight(20)
@@ -140,11 +140,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		switch msg.Code {
 		case tea.KeyTab:
-			if m.Cmd == ssh {
-				m.Cmd = mosh
+			if m.Cmd == sshCmd {
+				m.Cmd = moshCmd
 				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 			} else {
-				m.Cmd = ssh
+				m.Cmd = sshCmd
 				m.li.NewStatusMessage(fmt.Sprintf("[%s]", m.Cmd))
 			}
 		case tea.KeyEnter:
@@ -274,23 +274,34 @@ func (m *Model) connect() tea.Cmd {
 		m.ExitHost = strings.TrimSpace(host.title)
 		return tea.Quit
 	}
-	sshPath, err := exec.LookPath(m.Cmd.String())
+
+	cmdPath, err := exec.LookPath(m.Cmd.String())
 	if err != nil {
 		return AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 	}
+
+	var errbuf bytes.Buffer
 	var cmd *exec.Cmd
-	cmd = exec.Command(sshPath, host.title, "-F", m.config.GetPath())
+	cmd = exec.Command(cmdPath, host.title, "-F", m.config.GetPath())
+	if m.Cmd == moshCmd {
+		sshFlag := fmt.Sprintf("--ssh='ssh -F %s'", m.config.GetPath())
+		cmd = exec.Command(
+			cmdPath,
+			host.title,
+			sshFlag,
+		)
+	}
 	if host.title == "create free research root server" {
 		host.desc = strings.TrimSpace(host.desc)
-		_sshPath, err := exec.LookPath("sshpass")
+		_cmdPath, err := exec.LookPath("sshpass")
 		if err != nil {
-			_sshPath, err = exec.LookPath("ssh")
+			_cmdPath, err = exec.LookPath("ssh")
 			if err != nil {
 				return AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 			}
-			cmd = exec.Command(_sshPath, host.title, "-F", m.config.GetPath())
+			cmd = exec.Command(_cmdPath, host.title, "-F", m.config.GetPath())
 		} else {
-			cmd = exec.Command(_sshPath, "-p", "segfault", "ssh", host.desc)
+			cmd = exec.Command(_cmdPath, "-p", "segfault", "ssh", host.desc)
 		}
 	}
 	cmd.Stderr = &m.errbuf

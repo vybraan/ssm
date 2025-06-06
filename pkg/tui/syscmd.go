@@ -7,6 +7,6 @@ func (s SysCmd) String() string {
 }
 
 const (
-	ssh  SysCmd = "ssh"
-	mosh SysCmd = "mosh"
+	sshCmd  SysCmd = "ssh"
+	moshCmd SysCmd = "mosh"
 )
