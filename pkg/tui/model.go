@@ -280,7 +280,6 @@ func (m *Model) connect() tea.Cmd {
 		return AddError(fmt.Errorf("can't find `%s` cmd in your path: %v", m.Cmd, err))
 	}
 
-	var errbuf bytes.Buffer
 	var cmd *exec.Cmd
 	cmd = exec.Command(cmdPath, host.title, "-F", m.config.GetPath())
 	if m.Cmd == moshCmd {
