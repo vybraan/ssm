@@ -13,7 +13,7 @@ import (
 	"github.com/charmbracelet/lipgloss/v2"
 )
 
-func NewCmdModel(base tea.Model) tea.Model {
+func RunCmdModel(base tea.Model) tea.Model {
 	previousModel, ok := base.(*Model)
 	if !ok {
 		panic("failed to cast tea.Model to Model")
@@ -29,7 +29,7 @@ func NewCmdModel(base tea.Model) tea.Model {
 	cmdInput.VirtualCursor = true
 
 	// using double main model viewport width because it use half of screenwidth
-	cmdInput.SetWidth(previousModel.vp.Width() * 2)
+	cmdInput.SetWidth(previousModel.vp.Width()*2 - 3)
 	vp.SetWidth(previousModel.vp.Width() * 2)
 
 	vp.SetHeight(previousModel.vp.Height() - lipgloss.Height(cmdInput.View()) - 2) // - 2 to accommodate the bar, since we can't get the Height
@@ -127,6 +127,9 @@ func (m *cmdModel) handleKeyMsg(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 }
 
 func (m *cmdModel) handleWindowSize(msg tea.WindowSizeMsg) {
+	m.input.SetWidth(msg.Width - 3)
+	m.viewport.SetWidth(msg.Width)
+	m.viewport.SetHeight(msg.Height)
 }
 
 func (m *cmdModel) handleCommandResult(msg cmdResultMsg) {
