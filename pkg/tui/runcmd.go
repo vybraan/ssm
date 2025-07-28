@@ -210,8 +210,8 @@ func runCommand(m *cmdModel, command string) tea.Cmd {
 		args := []string{
 			"-T",
 			"-F", prev.config.GetPath(),
-			"-o", "PreferredAuthentications=publickey",
-			"-o", "PasswordAuthentication=no",
+			// "-o", "PreferredAuthentications=publickey",
+			// "-o", "PasswordAuthentication=no",
 			selected.title,
 			command,
 		}
