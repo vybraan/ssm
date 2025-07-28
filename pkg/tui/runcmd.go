@@ -14,19 +14,19 @@ import (
 )
 
 func NewCmdModel(base tea.Model) tea.Model {
-
 	previousModel, ok := base.(*Model)
 	if !ok {
-		panic("Failed to cast the tea.Model to Model")
+		panic("failed to cast tea.Model to Model")
 	}
 
 	cmdInput := textinput.New()
 	vp := viewport.New()
 
-	cmdInput.Placeholder = "Enter command"
+	cmdInput.Placeholder = "enter command"
 	cmdInput.Prompt = "> "
 	cmdInput.CharLimit = 256
 	cmdInput.Focus()
+	cmdInput.VirtualCursor = true
 
 	// using double main model viewport width because it use half of screenwidth
 	cmdInput.SetWidth(previousModel.vp.Width() * 2)
