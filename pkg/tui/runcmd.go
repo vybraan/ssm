@@ -98,27 +98,38 @@ func (m *cmdModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *cmdModel) handleKeyMsg(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.String() {
-	case "esc":
-		return m.previousModel, nil
+	switch msg := msg.(type) {
+	case tea.KeyPressMsg:
+		switch msg.Code {
+		case tea.KeyEsc:
+			return m.previousModel, nil
+		case tea.KeyEnter:
+			command := strings.TrimSpace(m.input.Value())
+			if command == "" {
+				return m, nil
+			}
 
-	case "enter":
-		command := strings.TrimSpace(m.input.Value())
-		if command == "" {
-			return m, nil
+			m.input.SetValue("")
+			m.commands = append(m.commands, "$ "+command)
+			m.viewport.SetContent(strings.Join(m.commands, "\n"))
+			m.viewport.GotoBottom()
+
+			m.input.Blur()
+			m.running = true
+
+			return m, runCommand(m, command)
 		}
-
-		m.input.SetValue("")
-		m.commands = append(m.commands, "$ "+command)
-		m.viewport.SetContent(strings.Join(m.commands, "\n"))
-		m.viewport.GotoBottom()
-
-		m.input.Blur()
-		m.running = true
-
-		return m, runCommand(m, command)
+		switch msg.Mod {
+		// we're only interested in ctrl+<key>
+		case tea.ModCtrl:
+			switch msg.Code {
+			// clear output
+			case 'l':
+				m.commands = nil
+				m.viewport.SetContent("")
+			}
+		}
 	}
-
 	return m, nil
 }
 
@@ -139,33 +150,27 @@ func (m *cmdModel) handleCommandResult(msg cmdResultMsg) {
 		m.viewport.SetContent(strings.Join(m.commands, "\n"))
 		m.viewport.GotoBottom()
 	}
-
 	m.running = false
 	m.input.Focus()
 }
 
 func (m cmdModel) View() string {
-
 	var builder strings.Builder
-
 	builder.WriteString(m.Bar() + "\n\n")
 	if m.running {
-
 		builder.WriteString(m.spinner.View() + " " + m.input.View() + "\n\n")
 	} else {
-
 		builder.WriteString(m.input.View() + "\n\n")
 	}
 	builder.WriteString(m.viewport.View())
-
 	return builder.String()
 }
+
 func (m cmdModel) Bar() string {
 	pm, ok := m.previousModel.(*Model)
 	if !ok {
-		return "Invalid model"
+		return "invalid model"
 	}
-
 	selectedItem, ok := pm.li.SelectedItem().(item)
 	if !ok {
 		return renderPrimaryBar("No host selected", pm.theme.selectedTitleColor)
