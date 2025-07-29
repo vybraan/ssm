@@ -11,7 +11,6 @@
 [license-badge]: https://img.shields.io/badge/license-BSD3-blue
 [x-badge]: https://img.shields.io/twitter/follow/leonardofaoro?label=follow&style=social
 
-# Purpose
 Scratching my own itch: `ssm` is an SSH connection manager designed to connect, filter, tag, and much more from a simple terminal interface. Works on top of installed command-line programs and does not require any setup on remote systems.
 
 **tl;dr** - [try now](#Install)
@@ -41,12 +40,12 @@ See [CHANGELOG](changelog.md) for dev info.
 <enter↵>       connect to selected host
 <ctrl+e>       edit ssh config
 <ctrl+v>       show all config params
+<ctrl+r>       run commands on host w/o starting a pty 
 <tab>          switch between SSH/MOSH
 < / >          filter hosts
 <q or esc>     quit
 
 # under development (coming soon)
-ctrl+r         run commands on the server without starting a pty 
 ctrl+s         sftp upload/download files to/from server 
 ctrl+g         port-forwarding UI 
 space␣         select multiple hosts to interact with
