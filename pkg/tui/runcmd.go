@@ -130,7 +130,10 @@ func (m *cmdModel) handleWindowSize(msg tea.WindowSizeMsg) {
 
 func (m *cmdModel) handleCommandResult(msg cmdResultMsg) {
 	if msg.err != nil {
-		m.viewport.SetContent(msg.err.Error() + "\n" + msg.output)
+		errorMsg := msg.err.Error() + "\n" + msg.output
+		m.commands = append(m.commands, errorMsg)
+		m.viewport.SetContent(strings.Join(m.commands, "\n"))
+		m.viewport.GotoBottom()
 	} else {
 		m.commands = append(m.commands, msg.output)
 		m.viewport.SetContent(strings.Join(m.commands, "\n"))
