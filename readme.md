@@ -13,7 +13,7 @@
 
 Scratching my own itch: `ssm` is an SSH connection manager designed to connect, filter, tag, and much more from a simple terminal interface. Works on top of installed command-line programs and does not require any setup on remote systems.
 
-**tl;dr** - [try now](#Install)
+**tl;dr** - [Install](#Install)
 
 See [HELP](data/help) for CLI flags. \
 See [CHANGELOG](changelog.md) for dev info.
@@ -23,11 +23,12 @@ See [CHANGELOG](changelog.md) for dev info.
 ## Features
 - vim keys: jkhl, ctrl+d/u, g/G
 - emacs keys: ctrl+p/n/b/f
-- filter through all your servers
-- switch between SSH and MOSH with a tab
+- `ctrl+r` run commands without spawning a TTY
 - `ctrl+e` edit the loaded config
-- `ctrl+v` shows all config params
 - config will automatically reload on change
+- `ctrl+v` show config next to servers
+- filter through all your servers: /
+- switch between SSH and MOSH with TAB
 - CLI short-flags support e.g. `ssm -seo` enables `--show`, `--exit`, and `--order`
 - group servers using tags e.g. `#tag: admin`
 - show only admin tagged servers `ssm admin`
@@ -39,8 +40,8 @@ See [CHANGELOG](changelog.md) for dev info.
 ```
 <enter↵>       connect to selected host
 <ctrl+e>       edit ssh config
-<ctrl+v>       show all config params
-<ctrl+r>       run commands on host w/o starting a pty 
+<ctrl+v>       show all config params in sideview
+<ctrl+r>       run commands on host w/o starting a tty 
 <tab>          switch between SSH/MOSH
 < / >          filter hosts
 <q or esc>     quit
